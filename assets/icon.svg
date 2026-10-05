@@ -1,18 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <!-- Tomato body -->
-  <circle cx="64" cy="70" r="52" fill="#e8590c"/>
-  <circle cx="64" cy="70" r="52" fill="url(#shine)"/>
-  <!-- Leaves -->
-  <path d="M64 24 L50 12 L58 26 L40 22 L56 32 L64 30 L72 32 L88 22 L70 26 L78 12 Z" fill="#2f9e44"/>
-  <rect x="61" y="8" width="6" height="18" rx="3" fill="#2b8a3e"/>
-  <!-- Clock hands -->
-  <path d="M64 70 V44" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
-  <path d="M64 70 L82 82" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
-  <circle cx="64" cy="70" r="7" fill="#fff"/>
-  <defs>
-    <radialGradient id="shine" cx="0.35" cy="0.3" r="0.8">
-      <stop offset="0" stop-color="#fff" stop-opacity="0.25"/>
-      <stop offset="0.6" stop-color="#fff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+  <!-- Stopwatch: crown and side button -->
+  <rect x="52" y="10" width="24" height="12" rx="4" fill="#c2410c"/>
+  <rect x="59" y="18" width="10" height="14" fill="#c2410c"/>
+  <rect x="94" y="28" width="10" height="16" rx="3" fill="#c2410c" transform="rotate(45 99 36)"/>
+  <!-- Body and face -->
+  <circle cx="64" cy="72" r="46" fill="#e8590c"/>
+  <circle cx="64" cy="72" r="32" fill="#fff"/>
+  <!-- Time remaining -->
+  <path d="M64 72 V46 A26 26 0 0 1 86.52 85 Z" fill="#e8590c"/>
+  <circle cx="64" cy="72" r="6" fill="#e8590c"/>
 </svg>
