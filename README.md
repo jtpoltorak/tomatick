@@ -28,6 +28,19 @@ them on.
   <img src="docs/blocked.png" alt="Blocked site page" width="600" />
 </p>
 
+## Built with Claude
+
+Tomatick is a portfolio project, designed and built by Jon Poltorak working with
+[Claude Code](https://claude.com/claude-code), Anthropic's AI coding assistant.
+Claude wrote most of the code, tests, and docs from plain-language requests,
+and each change landed as a reviewed pull request; the
+[pull request history](https://github.com/jtpoltorak/tomatick/pulls?q=is%3Apr+is%3Aclosed)
+shows how it came together.
+
+It's free, open source ([MIT](LICENSE)), and will stay that way. It's meant
+for anyone who finds focus hard, including people with ADD or ADHD: a timer
+that stays simple, quiet by default, and out of the way.
+
 ## Development
 
 Requires Node 22.22.3+ (or 24+) and Chrome 120+.
@@ -88,10 +101,4 @@ collection, which keeps review straightforward.
 1. Bump `version` in `package.json` (the build copies it into the manifest).
 1. Run `npm run package` and upload the zip it writes.
 1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Add tomatick.support@gmail.com as the account's contact email (it's shown on the listing and can be changed later; the sign-in account can't). Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
-1. Listing assets: at least one 1280x800 screenshot, a 440x280 promo tile, and the 128px icon (`public/icons/icon-128.png`).
-1. Privacy tab: privacy policy URL `https://github.com/jtpoltorak/tomatick/blob/main/PRIVACY.md`. Certify that no user data is collected. Single purpose: "A focus timer that alternates focus sessions and breaks." Permission justifications:
-   - `alarms`: wake the extension when a focus session or break ends.
-   - `notifications`: show the optional "time's up" notification.
-   - `offscreen`: play the optional "time's up" sound, since service workers can't play audio.
-   - `storage`: remember the timer and the user's settings.
-   - `declarativeNetRequestWithHostAccess` and `<all_urls>` (both optional, requested only when the user turns on the site blocker): redirect the sites the user listed to the extension's "stay focused" page during focus sessions.
+1. Fill in the Store listing, Privacy practices, and Distribution tabs from [store/LISTING.md](store/LISTING.md), which has the description, category, permission justifications, privacy answers, and the screenshots and promo tiles in [store/images](store/images). Regenerate the images with `node scripts/store-images.mjs` after UI changes.

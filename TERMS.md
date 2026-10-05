@@ -6,9 +6,8 @@ By installing or using Tomatick, you agree to these terms.
 
 ## Using Tomatick
 
-Tomatick is free. You're welcome to use it for personal or work use. Don't use
-it for anything unlawful, and don't sell or redistribute copies of it as your
-own.
+Tomatick is free, and always will be. You're welcome to use it for personal or
+work use. Don't use it for anything unlawful.
 
 ## No guarantees
 
@@ -28,8 +27,9 @@ that come from using, or not being able to use, Tomatick.
 
 ## Ownership
 
-Tomatick, its code and its design are © 2026 Jon Poltorak. Third-party parts keep
-their own licenses: the Rubik font is under the SIL Open Font License
+Tomatick, its code and its design are © 2026 Jon Poltorak. The source code is
+open under the [MIT License](LICENSE), so you're free to study, change, and
+share it as that license allows. Third-party parts keep their own licenses: the Rubik font is under the SIL Open Font License
 (`public/fonts/OFL.txt`), and Angular's licenses ship in the extension as
 `3rdpartylicenses.txt`.
 
