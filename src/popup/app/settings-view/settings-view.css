@@ -9,7 +9,7 @@ section {
 }
 h2 {
   margin: 0 0 8px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -31,7 +31,7 @@ h2 {
 .note {
   margin: 4px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .stepper {
@@ -64,7 +64,7 @@ h2 {
   border: 0;
   background: var(--surface);
   color: var(--muted);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
 }
 .step:hover {
@@ -128,7 +128,7 @@ input[role='switch']:checked::after {
 }
 .sites .empty {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .remove {
   width: 24px;
@@ -138,7 +138,7 @@ input[role='switch']:checked::after {
   border-radius: 50%;
   background: none;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
 }
 .remove:hover {
@@ -215,5 +215,5 @@ footer {
 }
 .saved {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }

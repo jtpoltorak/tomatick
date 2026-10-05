@@ -38,7 +38,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font:
-    16px/1.5 Rubik,
+    17px/1.5 Rubik,
     system-ui,
     -apple-system,
     'Segoe UI',
@@ -54,7 +54,7 @@ main {
 }
 h1 {
   margin: 16px 0 4px;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
 }
 p {
@@ -68,7 +68,7 @@ p {
 .clock {
   margin: 20px 0 4px;
   color: var(--accent);
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 300;
   font-variant-numeric: tabular-nums;
 }
@@ -90,7 +90,7 @@ p {
 .quiet {
   margin-top: 24px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 .quiet:hover {
   color: var(--fg);

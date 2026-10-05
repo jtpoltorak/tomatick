@@ -16,6 +16,13 @@ describe('HelpView', () => {
     expect(el.textContent).toContain('Alt+Shift+P');
   });
 
+  it('explains the technique in collapsible sections', () => {
+    const el = setup();
+    const topics = Array.from(el.querySelectorAll('details summary')).map((s) => s.textContent);
+    expect(topics).toEqual(['What it is', 'Who invented it', 'Why it works']);
+    expect(el.textContent).toContain('Francesco Cirillo');
+  });
+
   it('links to the contact address and the legal page', () => {
     const el = setup();
     const mail = el.querySelector<HTMLAnchorElement>('a[href^="mailto:"]')!;

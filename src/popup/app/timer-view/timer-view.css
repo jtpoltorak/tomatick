@@ -18,7 +18,7 @@
   border-radius: 999px;
   background: transparent;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
 }
 .phase-pill:hover:not(:disabled):not(.active) {
@@ -68,14 +68,14 @@
   justify-content: center;
 }
 .clock {
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: -1px;
 }
 .status {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .controls {
@@ -92,7 +92,7 @@
   background: var(--accent);
   color: var(--on-accent);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
 }
 .primary-btn:hover {
   filter: brightness(1.08);
@@ -103,7 +103,7 @@
   align-items: center;
   justify-content: space-between;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .cycle {
   display: flex;
@@ -127,7 +127,7 @@
   border-radius: 8px;
   background: var(--surface);
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .hint span {
   flex: 1;
