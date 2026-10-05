@@ -1,7 +1,7 @@
 // Builds the extension into dist/:
 //   1. Angular builds the popup (index.html + main.js + styles.css) and copies public/.
 //   2. esbuild bundles the background service worker, the offscreen sound player,
-//      and the site blocker's "stay focused" page.
+//      the site blocker's "stay focused" page, and the legal page.
 //   3. The manifest version is synced from package.json.
 // Flags: --watch rebuilds on change; --zip also writes a Web Store upload zip.
 import * as esbuild from 'esbuild';
@@ -21,6 +21,7 @@ const workerOptions = {
     background: 'src/background/background.ts',
     offscreen: 'src/offscreen/offscreen.ts',
     blocked: 'src/blocked/blocked.ts',
+    legal: 'src/legal/legal.ts',
   },
   outdir: 'dist',
   bundle: true,
@@ -51,7 +52,21 @@ if (watch) {
   if (code !== 0) process.exit(code ?? 1);
   await esbuild.build(workerOptions);
   const version = await syncManifestVersion();
-  if (zip) await writeZip('dist', `tomatick-${version}.zip`);
+  if (zip) {
+    await warnAboutPlaceholders();
+    await writeZip('dist', `tomatick-${version}.zip`);
+  }
+}
+
+/** The Help screen and legal page shouldn't ship with "YOUR NAME" in them. */
+async function warnAboutPlaceholders() {
+  const about = await readFile('src/shared/about.ts', 'utf8');
+  const left = ['YOUR NAME', 'support@example.com'].filter((p) => about.includes(`'${p}'`));
+  if (left.length) {
+    console.warn(
+      `\nWarning: fill in ${left.join(' and ')} in src/shared/about.ts before publishing.\n`,
+    );
+  }
 }
 
 /** Minimal zip writer (deflate, no dependencies) for the Web Store upload. */
