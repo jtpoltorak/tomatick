@@ -1,7 +1,8 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { MAX_BLOCKED_SITES, normalizeSite, SUGGESTED_SITES } from '../../../shared/blocker';
 import { playSound } from '../../../shared/sounds';
 import {
   DEFAULT_SETTINGS,
@@ -26,6 +27,13 @@ export class SettingsView {
   protected readonly sounds = Object.entries(SOUND_LABELS) as [SoundId, string][];
   protected readonly saved = signal(false);
 
+  // The blocker lives outside the form because turning it on waits on Chrome's permission prompt.
+  protected readonly blockSites = signal(this.store.settings().blockSites);
+  protected readonly blockedSites = signal(this.store.settings().blockedSites);
+  protected readonly blockerOn = computed(() => this.blockSites() && this.store.blockerAccess());
+  protected readonly siteError = signal('');
+  private savedTimer: ReturnType<typeof setTimeout> | undefined;
+
   protected readonly durations = [
     { key: 'workMinutes', label: 'Focus', max: 180 },
     { key: 'shortBreakMinutes', label: 'Short break', max: 60 },
@@ -48,21 +56,64 @@ export class SettingsView {
   constructor() {
     this.form.setValue(this.toForm(this.store.settings()), { emitEvent: false });
 
-    let savedTimer: ReturnType<typeof setTimeout> | undefined;
     inject(DestroyRef).onDestroy(() => {
-      clearTimeout(savedTimer);
+      clearTimeout(this.savedTimer);
       void this.audio?.close();
     });
 
     // Changes save as you go, so there's no Save button to forget.
-    this.form.valueChanges.pipe(debounceTime(300), takeUntilDestroyed()).subscribe(() => {
-      if (this.form.invalid) return;
-      void this.store.updateSettings(this.fromForm()).then(() => {
-        this.saved.set(true);
-        clearTimeout(savedTimer);
-        savedTimer = setTimeout(() => this.saved.set(false), 1500);
-      });
+    this.form.valueChanges
+      .pipe(debounceTime(300), takeUntilDestroyed())
+      .subscribe(() => this.save());
+  }
+
+  private save(): void {
+    if (this.form.invalid) return;
+    void this.store.updateSettings(this.fromForm()).then(() => {
+      this.saved.set(true);
+      clearTimeout(this.savedTimer);
+      this.savedTimer = setTimeout(() => this.saved.set(false), 1500);
     });
+  }
+
+  protected async toggleBlocker(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.checked) {
+      // The background worker gives the site access back once this saves.
+      this.blockSites.set(false);
+      this.save();
+      return;
+    }
+    input.checked = false; // stays off unless the user allows access
+    if (!(await this.store.requestBlockerAccess())) return;
+    if (this.blockedSites().length === 0) this.blockedSites.set(SUGGESTED_SITES);
+    this.blockSites.set(true);
+    this.save();
+  }
+
+  protected addSite(input: HTMLInputElement): void {
+    const typed = input.value.trim();
+    if (!typed) return;
+    const site = normalizeSite(typed);
+    if (!site) {
+      this.siteError.set(`"${typed}" doesn't look like a website.`);
+      return;
+    }
+    if (!this.blockedSites().includes(site)) {
+      if (this.blockedSites().length >= MAX_BLOCKED_SITES) {
+        this.siteError.set(`You can block up to ${MAX_BLOCKED_SITES} sites.`);
+        return;
+      }
+      this.blockedSites.update((sites) => [...sites, site]);
+      this.save();
+    }
+    input.value = '';
+    this.siteError.set('');
+  }
+
+  protected removeSite(site: string): void {
+    this.blockedSites.update((sites) => sites.filter((s) => s !== site));
+    this.save();
   }
 
   protected step(
@@ -82,16 +133,24 @@ export class SettingsView {
   }
 
   protected restoreDefaults(): void {
+    this.blockSites.set(DEFAULT_SETTINGS.blockSites);
+    this.blockedSites.set(DEFAULT_SETTINGS.blockedSites);
+    this.siteError.set('');
     this.form.setValue(this.toForm(DEFAULT_SETTINGS));
   }
 
   private toForm(s: Settings) {
-    const { volume, ...rest } = s;
+    const { volume, blockSites, blockedSites, ...rest } = s;
     return { ...rest, volumePercent: Math.round(volume * 100) };
   }
 
   private fromForm(): Settings {
     const { volumePercent, ...rest } = this.form.getRawValue();
-    return sanitizeSettings({ ...rest, volume: volumePercent / 100 });
+    return sanitizeSettings({
+      ...rest,
+      volume: volumePercent / 100,
+      blockSites: this.blockSites(),
+      blockedSites: this.blockedSites(),
+    });
   }
 }

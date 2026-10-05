@@ -110,11 +110,68 @@ input[role='switch']:checked::after {
   transform: translateX(16px);
 }
 
-.sound-options {
+.sub-options {
   padding: 0 0 4px 12px;
   margin-bottom: 4px;
   border-left: 2px solid var(--track);
 }
+.sites {
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.sites li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 28px;
+}
+.sites .empty {
+  color: var(--muted);
+  font-size: 12px;
+}
+.remove {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+.remove:hover {
+  background: var(--surface);
+  color: var(--fg);
+}
+.add-site {
+  display: flex;
+  gap: 6px;
+}
+.add-site input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: inherit;
+  font: inherit;
+}
+.add-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.add-btn:hover {
+  border-color: var(--muted);
+}
+.note.error {
+  color: #e03131;
+}
+
 .inline {
   display: flex;
   align-items: center;

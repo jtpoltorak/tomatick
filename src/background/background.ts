@@ -10,7 +10,8 @@ import type {
   CommandResponse,
   PlaySoundMessage,
 } from '../shared/messages';
-import { loadSettings, loadState, saveState } from '../shared/storage';
+import { BLOCKER_PERMISSIONS, hostMatches, shouldBlock, SUGGESTED_SITES } from '../shared/blocker';
+import { loadSettings, loadState, saveSettings, saveState } from '../shared/storage';
 import {
   advance,
   pause,
@@ -48,7 +49,56 @@ async function commit(state: TimerState): Promise<TimerState> {
   await saveState(state);
   await syncAlarms(state);
   await updateBadge(state);
+  await syncBlocking(state);
   return state;
+}
+
+const BLOCK_RULE_ID = 1;
+
+/**
+ * Turns the site blocker's redirect rule on during focus sessions and off
+ * otherwise. Without the optional permissions, chrome.declarativeNetRequest
+ * doesn't exist and there is nothing to do.
+ */
+async function syncBlocking(state: TimerState, settings?: Settings): Promise<void> {
+  if (!chrome.declarativeNetRequest) return;
+  settings ??= await loadSettings();
+  const active = shouldBlock(state, settings);
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: [BLOCK_RULE_ID],
+    addRules: active
+      ? [
+          {
+            id: BLOCK_RULE_ID,
+            priority: 1,
+            action: {
+              type: chrome.declarativeNetRequest.RuleActionType.REDIRECT,
+              // The original URL rides along after the #, so the blocked page can link back to it.
+              redirect: { regexSubstitution: `${chrome.runtime.getURL('blocked.html')}#\\0` },
+            },
+            condition: {
+              regexFilter: '^.+$',
+              requestDomains: settings.blockedSites,
+              resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
+            },
+          },
+        ]
+      : [],
+  });
+  if (active) await redirectOpenTabs(settings.blockedSites);
+}
+
+/** The rule only catches new page loads, so also move tabs that are already open. */
+async function redirectOpenTabs(sites: string[]): Promise<void> {
+  const patterns = sites.flatMap((site) => [`*://${site}/*`, `*://*.${site}/*`]);
+  const tabs = await chrome.tabs.query({ url: patterns });
+  const blockedPage = chrome.runtime.getURL('blocked.html');
+  await Promise.allSettled(
+    tabs
+      .filter((tab) => tab.id !== undefined && tab.url)
+      .filter((tab) => sites.some((site) => hostMatches(new URL(tab.url!).hostname, site)))
+      .map((tab) => chrome.tabs.update(tab.id!, { url: `${blockedPage}#${tab.url}` })),
+  );
 }
 
 async function syncAlarms(state: TimerState): Promise<void> {
@@ -206,11 +256,40 @@ chrome.notifications.onClicked.addListener((id) => {
 });
 
 // When durations change in Options, an idle timer should show the new length.
+// Blocker changes take effect right away, even mid-session.
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'sync' || !changes['settings']) return;
   void serialized(async () => {
     const [state, settings] = await Promise.all([loadState(), loadSettings()]);
     if (state.status === 'idle') await commit(reset(state, settings));
+    else await syncBlocking(state, settings);
+    // Turning the blocker off hands back its site access.
+    if (!settings.blockSites && (await chrome.permissions.contains(BLOCKER_PERMISSIONS))) {
+      await chrome.permissions.remove(BLOCKER_PERMISSIONS);
+    }
+  });
+});
+
+// The settings switch asks for site access. Chrome may close the popup while
+// its prompt is up, so the worker finishes turning the blocker on.
+chrome.permissions.onAdded.addListener(() => {
+  void serialized(async () => {
+    if (!(await chrome.permissions.contains(BLOCKER_PERMISSIONS))) return;
+    const [state, settings] = await Promise.all([loadState(), loadSettings()]);
+    if (!settings.blockSites) {
+      const blockedSites = settings.blockedSites.length ? settings.blockedSites : SUGGESTED_SITES;
+      await saveSettings({ ...settings, blockSites: true, blockedSites });
+    }
+    await syncBlocking(state);
+  });
+});
+
+// Access removed in chrome://extensions turns the blocker off too.
+chrome.permissions.onRemoved.addListener(() => {
+  void serialized(async () => {
+    if (await chrome.permissions.contains(BLOCKER_PERMISSIONS)) return;
+    const settings = await loadSettings();
+    if (settings.blockSites) await saveSettings({ ...settings, blockSites: false });
   });
 });
 

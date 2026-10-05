@@ -5,12 +5,9 @@
   "version": "1.0.0",
   "description": "A simple, customizable Pomodoro timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "minimum_chrome_version": "120",
-  "permissions": [
-    "alarms",
-    "notifications",
-    "offscreen",
-    "storage"
-  ],
+  "permissions": ["alarms", "notifications", "offscreen", "storage"],
+  "optional_permissions": ["declarativeNetRequestWithHostAccess"],
+  "optional_host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -41,5 +38,11 @@
       },
       "description": "Open Tomatick"
     }
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

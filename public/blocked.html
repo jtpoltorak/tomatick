@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- Where the site blocker sends blocked sites during a focus session. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stay focused · Tomatick</title>
+    <link rel="icon" href="icons/icon-32.png" />
+    <link rel="stylesheet" href="blocked.css" />
+  </head>
+  <body>
+    <main>
+      <img src="icons/icon-128.png" width="72" height="72" alt="" />
+      <h1 id="title">Stay focused</h1>
+      <p id="message"></p>
+      <p id="clock" class="clock" aria-live="off"></p>
+      <a id="continue" class="button" hidden>Continue</a>
+      <a id="settings" class="quiet" href="index.html#settings">Edit blocked sites</a>
+    </main>
+    <script src="blocked.js" type="module"></script>
+  </body>
+</html>

@@ -45,4 +45,60 @@ describe('SettingsView', () => {
     await fixture.whenStable();
     expect(store.settings().soundEnabled).toBe(true);
   });
+
+  describe('site blocker', () => {
+    const blockerSwitch = (el: HTMLElement) =>
+      el.querySelector<HTMLInputElement>('input[role=switch]:not([formcontrolname])')!;
+
+    it('is off by default with the site list hidden', async () => {
+      const { el } = await setup();
+      expect(blockerSwitch(el).checked).toBe(false);
+      expect(el.querySelector('.sites')).toBeNull();
+    });
+
+    it('asks for access, then turns on with suggested sites', async () => {
+      const { store, el, fixture } = await setup();
+      blockerSwitch(el).click();
+      await vi.advanceTimersByTimeAsync(400);
+      fixture.detectChanges();
+      expect(blockerSwitch(el).checked).toBe(true);
+      expect(store.settings().blockSites).toBe(true);
+      expect(store.settings().blockedSites).toContain('youtube.com');
+      expect(el.querySelectorAll('.sites li').length).toBe(store.settings().blockedSites.length);
+    });
+
+    it('stays off when access is denied', async () => {
+      const { store, el, fixture } = await setup();
+      store.grantBlockerAccess = false;
+      blockerSwitch(el).click();
+      await vi.advanceTimersByTimeAsync(400);
+      fixture.detectChanges();
+      expect(blockerSwitch(el).checked).toBe(false);
+      expect(store.settings().blockSites).toBe(false);
+    });
+
+    it('adds typed sites as bare domains and removes them', async () => {
+      const { store, el, fixture } = await setup();
+      blockerSwitch(el).click();
+      await vi.advanceTimersByTimeAsync(400);
+      fixture.detectChanges();
+
+      const input = el.querySelector<HTMLInputElement>('#newSite')!;
+      input.value = 'https://www.News.com/today';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await vi.advanceTimersByTimeAsync(400);
+      fixture.detectChanges();
+      expect(store.settings().blockedSites).toContain('news.com');
+      expect(input.value).toBe('');
+
+      input.value = 'not a site';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+      expect(el.querySelector('.error')?.textContent).toContain("doesn't look like a website");
+
+      el.querySelector<HTMLButtonElement>('[aria-label="Unblock news.com"]')!.click();
+      await vi.advanceTimersByTimeAsync(400);
+      expect(store.settings().blockedSites).not.toContain('news.com');
+    });
+  });
 });

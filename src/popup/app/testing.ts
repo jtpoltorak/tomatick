@@ -21,6 +21,7 @@ export function createFakeStore(overrides: Partial<TimerState> = {}) {
     settings,
     loaded: signal(true),
     alertHintDismissed: signal(false),
+    blockerAccess: signal(false),
     remainingMs: computed(() => remainingMs(state(), now)),
     totalMs: computed(() => phaseDurationMs(state().phase, settings())),
     progress: computed(() => 0),
@@ -31,6 +32,12 @@ export function createFakeStore(overrides: Partial<TimerState> = {}) {
     },
     async updateSettings(next: Settings) {
       settings.set(next);
+    },
+    /** Tests set this to decide how the permission prompt is answered. */
+    grantBlockerAccess: true,
+    async requestBlockerAccess() {
+      fake.blockerAccess.set(fake.grantBlockerAccess);
+      return fake.grantBlockerAccess;
     },
     async dismissAlertHint() {
       fake.alertHintDismissed.set(true);

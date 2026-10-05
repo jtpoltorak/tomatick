@@ -1,6 +1,8 @@
 // Pure timer logic shared by the background worker, popup, and options page.
 // Nothing in this file touches `chrome.*`, so it can be unit tested in Node.
 
+import { sanitizeSites } from './blocker';
+
 export type Phase = 'work' | 'shortBreak' | 'longBreak';
 export type Status = 'idle' | 'running' | 'paused';
 export type SoundId = 'bell' | 'chime' | 'digital';
@@ -18,6 +20,10 @@ export interface Settings {
   sound: SoundId;
   /** 0 to 1. */
   volume: number;
+  /** Redirect the sites below to a "stay focused" page during focus sessions. */
+  blockSites: boolean;
+  /** Bare domains, e.g. "youtube.com". Subdomains are blocked too. */
+  blockedSites: string[];
 }
 
 export interface TimerState {
@@ -47,6 +53,9 @@ export const DEFAULT_SETTINGS: Settings = {
   soundEnabled: false,
   sound: 'bell',
   volume: 0.7,
+  // Off until the user turns it on and grants the site access it needs.
+  blockSites: false,
+  blockedSites: [],
 };
 
 export const SOUND_LABELS: Record<SoundId, string> = {
@@ -198,5 +207,8 @@ export function sanitizeSettings(input: Partial<Settings>): Settings {
     volume: Number.isFinite(Number(input.volume))
       ? Math.min(1, Math.max(0, Number(input.volume)))
       : d.volume,
+    blockSites: input.blockSites ?? d.blockSites,
+    blockedSites:
+      input.blockedSites === undefined ? d.blockedSites : sanitizeSites(input.blockedSites),
   };
 }

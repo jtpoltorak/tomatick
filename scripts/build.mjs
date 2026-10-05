@@ -1,6 +1,7 @@
 // Builds the extension into dist/:
 //   1. Angular builds the popup (index.html + main.js + styles.css) and copies public/.
-//   2. esbuild bundles the background service worker and the offscreen sound player.
+//   2. esbuild bundles the background service worker, the offscreen sound player,
+//      and the site blocker's "stay focused" page.
 //   3. The manifest version is synced from package.json.
 // Flags: --watch rebuilds on change; --zip also writes a Web Store upload zip.
 import * as esbuild from 'esbuild';
@@ -19,6 +20,7 @@ const workerOptions = {
   entryPoints: {
     background: 'src/background/background.ts',
     offscreen: 'src/offscreen/offscreen.ts',
+    blocked: 'src/blocked/blocked.ts',
   },
   outdir: 'dist',
   bundle: true,
