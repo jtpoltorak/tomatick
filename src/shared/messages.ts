@@ -1,0 +1,26 @@
+import type { Phase, SoundId, TimerState } from './timer';
+
+export type Command =
+  | { command: 'start' }
+  | { command: 'pause' }
+  | { command: 'reset' }
+  | { command: 'skip' }
+  | { command: 'setPhase'; phase: Phase };
+
+/** Popup -> background: change the timer. */
+export type CommandMessage = { type: 'command' } & Command;
+
+/** Background -> offscreen document: play an alert sound. */
+export interface PlaySoundMessage {
+  type: 'play-sound';
+  target: 'offscreen';
+  sound: SoundId;
+  volume: number;
+}
+
+export type CommandResponse = { ok: true; state: TimerState } | { ok: false; error: string };
+
+export function sendCommand(command: Command): Promise<CommandResponse> {
+  const message: CommandMessage = { type: 'command', ...command };
+  return chrome.runtime.sendMessage(message);
+}

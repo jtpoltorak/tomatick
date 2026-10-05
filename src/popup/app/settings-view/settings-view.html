@@ -1,0 +1,117 @@
+<form [formGroup]="form" (submit)="$event.preventDefault()">
+  <section>
+    <h2>Timers <span class="unit">minutes</span></h2>
+    @for (d of durations; track d.key) {
+      <div class="row">
+        <label [for]="d.key">{{ d.label }}</label>
+        <div class="stepper">
+          <button
+            type="button"
+            class="step"
+            (click)="step(d.key, -1)"
+            [attr.aria-label]="'Decrease ' + d.label"
+          >
+            −
+          </button>
+          <input type="number" [id]="d.key" [formControlName]="d.key" min="1" [max]="d.max" />
+          <button
+            type="button"
+            class="step"
+            (click)="step(d.key, 1)"
+            [attr.aria-label]="'Increase ' + d.label"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    }
+    <div class="row">
+      <label for="sessionsBeforeLongBreak">Long break after</label>
+      <div class="stepper">
+        <button
+          type="button"
+          class="step"
+          (click)="step('sessionsBeforeLongBreak', -1)"
+          aria-label="Fewer sessions"
+        >
+          −
+        </button>
+        <input
+          type="number"
+          id="sessionsBeforeLongBreak"
+          formControlName="sessionsBeforeLongBreak"
+          min="1"
+          max="12"
+        />
+        <button
+          type="button"
+          class="step"
+          (click)="step('sessionsBeforeLongBreak', 1)"
+          aria-label="More sessions"
+        >
+          +
+        </button>
+      </div>
+    </div>
+    <p class="note">The long break comes after this many focus sessions.</p>
+  </section>
+
+  <section>
+    <h2>When time's up</h2>
+    <label class="switch-row">
+      <span>Play a sound</span>
+      <input type="checkbox" role="switch" formControlName="soundEnabled" />
+    </label>
+    @if (form.controls.soundEnabled.value) {
+      <div class="sound-options">
+        <div class="row">
+          <label for="sound">Sound</label>
+          <div class="inline">
+            <select id="sound" formControlName="sound">
+              @for (s of sounds; track s[0]) {
+                <option [value]="s[0]">{{ s[1] }}</option>
+              }
+            </select>
+            <button
+              type="button"
+              class="icon-btn small"
+              (click)="preview()"
+              aria-label="Play sample"
+              title="Play sample"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <label for="volume">Volume</label>
+          <input
+            type="range"
+            id="volume"
+            formControlName="volumePercent"
+            min="0"
+            max="100"
+            step="5"
+          />
+        </div>
+      </div>
+    }
+    <label class="switch-row">
+      <span>Show a notification</span>
+      <input type="checkbox" role="switch" formControlName="notificationsEnabled" />
+    </label>
+    <label class="switch-row">
+      <span>Start breaks automatically</span>
+      <input type="checkbox" role="switch" formControlName="autoStartBreaks" />
+    </label>
+    <label class="switch-row">
+      <span>Start focus automatically after a break</span>
+      <input type="checkbox" role="switch" formControlName="autoStartWork" />
+    </label>
+  </section>
+
+  <footer>
+    <button type="button" class="text-btn" (click)="restoreDefaults()">Restore defaults</button>
+    <span class="saved" role="status">{{ saved() ? 'Saved' : '' }}</span>
+  </footer>
+</form>

@@ -1,0 +1,116 @@
+import {
+  advance,
+  DEFAULT_SETTINGS,
+  formatClock,
+  initialState,
+  pause,
+  remainingMs,
+  reset,
+  sanitizeSettings,
+  setPhase,
+  start,
+  type TimerState,
+} from './timer';
+
+describe('timer state machine', () => {
+  const s = DEFAULT_SETTINGS;
+  const T0 = new Date(2026, 9, 5, 9, 0, 0).getTime();
+  const MIN = 60_000;
+
+  it('start, pause and resume keep the remaining time', () => {
+    let st = start(initialState(s, T0), T0);
+    expect(remainingMs(st, T0 + 10 * MIN)).toBe(15 * MIN);
+    st = pause(st, T0 + 10 * MIN);
+    expect(st.status).toBe('paused');
+    expect(remainingMs(st, T0 + 60 * MIN)).toBe(15 * MIN);
+    st = start(st, T0 + 60 * MIN);
+    expect(st.endTime).toBe(T0 + 75 * MIN);
+  });
+
+  it('a completed focus session leads to a short break and counts', () => {
+    const st = advance(start(initialState(s, T0), T0), s, T0 + 25 * MIN, true);
+    expect(st.phase).toBe('shortBreak');
+    expect(st.status).toBe('idle');
+    expect(st.remainingMs).toBe(5 * MIN);
+    expect(st.completedInCycle).toBe(1);
+    expect(st.completedToday).toBe(1);
+  });
+
+  it('the fourth focus session leads to a long break, which resets the cycle', () => {
+    let st: TimerState = initialState(s, T0);
+    for (let i = 0; i < 4; i++) {
+      st = advance(st, s, T0, true); // focus -> break
+      if (i < 3) {
+        expect(st.phase).toBe('shortBreak');
+        st = advance(st, s, T0, true); // break -> focus
+      }
+    }
+    expect(st.phase).toBe('longBreak');
+    expect(st.remainingMs).toBe(15 * MIN);
+    st = advance(st, s, T0, true);
+    expect(st.phase).toBe('work');
+    expect(st.completedInCycle).toBe(0);
+    expect(st.completedToday).toBe(4);
+  });
+
+  it('skipping a focus session does not count it', () => {
+    const st = advance(initialState(s, T0), s, T0, false);
+    expect(st.phase).toBe('shortBreak');
+    expect(st.completedInCycle).toBe(0);
+    expect(st.completedToday).toBe(0);
+  });
+
+  it('auto-start settings start the next phase', () => {
+    const auto = { ...s, autoStartBreaks: true };
+    const st = advance(initialState(auto, T0), auto, T0, true);
+    expect(st.status).toBe('running');
+    expect(st.endTime).toBe(T0 + 5 * MIN);
+  });
+
+  it('the daily tally resets on a new day', () => {
+    let st = advance(initialState(s, T0), s, T0, true);
+    st = advance(st, s, T0, true); // back to focus
+    st = advance(st, s, T0 + 24 * 60 * MIN, true);
+    expect(st.completedToday).toBe(1);
+  });
+
+  it('reset restores the full phase length', () => {
+    const st = reset(pause(start(initialState(s, T0), T0), T0 + 3 * MIN), s);
+    expect(st.status).toBe('idle');
+    expect(st.remainingMs).toBe(25 * MIN);
+  });
+
+  it('formatClock rounds up to whole seconds', () => {
+    expect(formatClock(25 * MIN)).toBe('25:00');
+    expect(formatClock(59_001)).toBe('01:00');
+    expect(formatClock(0)).toBe('00:00');
+  });
+
+  it('setPhase jumps to a phase without counting it', () => {
+    const st = setPhase(start(initialState(s, T0), T0), 'longBreak', s);
+    expect(st.phase).toBe('longBreak');
+    expect(st.status).toBe('idle');
+    expect(st.remainingMs).toBe(15 * MIN);
+    expect(st.completedToday).toBe(0);
+  });
+
+  it('defaults are the classic 25/5/15 with alerts off', () => {
+    expect([
+      s.workMinutes,
+      s.shortBreakMinutes,
+      s.longBreakMinutes,
+      s.sessionsBeforeLongBreak,
+    ]).toEqual([25, 5, 15, 4]);
+    expect(s.soundEnabled).toBe(false);
+    expect(s.notificationsEnabled).toBe(false);
+  });
+
+  it('sanitizeSettings clamps bad input', () => {
+    const out = sanitizeSettings({ workMinutes: 0, shortBreakMinutes: 999, longBreakMinutes: NaN });
+    expect(out.workMinutes).toBe(1);
+    expect(out.shortBreakMinutes).toBe(60);
+    expect(out.longBreakMinutes).toBe(15);
+    expect(sanitizeSettings({ volume: 4, sound: 'kazoo' as never }).volume).toBe(1);
+    expect(sanitizeSettings({ sound: 'kazoo' as never }).sound).toBe('bell');
+  });
+});

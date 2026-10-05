@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Pomodoro Focus Timer",
+  "short_name": "Pomodoro",
+  "version": "1.0.0",
+  "description": "A simple, customizable Pomodoro timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
+  "minimum_chrome_version": "120",
+  "permissions": [
+    "alarms",
+    "notifications",
+    "offscreen",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Pomodoro",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      },
+      "description": "Open the Pomodoro timer"
+    }
+  }
+}

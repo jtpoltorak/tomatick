@@ -1,0 +1,92 @@
+<div class="phases" role="group" aria-label="Choose a timer">
+  @for (p of phases; track p.id) {
+    <button
+      class="phase-pill"
+      [class.active]="store.state().phase === p.id"
+      [attr.aria-pressed]="store.state().phase === p.id"
+      [disabled]="store.state().status === 'running' && store.state().phase !== p.id"
+      [title]="
+        store.state().status === 'running' ? 'Pause the timer to switch' : 'Switch to ' + p.label
+      "
+      (click)="choosePhase(p.id)"
+    >
+      {{ p.label }}
+    </button>
+  }
+</div>
+
+<section class="dial">
+  <svg viewBox="0 0 120 120" class="ring" aria-hidden="true">
+    <circle class="ring-track" cx="60" cy="60" [attr.r]="radius" />
+    <circle
+      class="ring-progress"
+      cx="60"
+      cy="60"
+      [attr.r]="radius"
+      [style.stroke-dasharray]="circumference"
+      [style.stroke-dashoffset]="dashOffset()"
+    />
+  </svg>
+  <div class="dial-text">
+    <div class="clock" role="timer" [attr.aria-label]="clock() + ' remaining'">{{ clock() }}</div>
+    <div class="status" aria-live="polite">{{ status() }}</div>
+  </div>
+</section>
+
+<div class="controls">
+  <button
+    class="icon-btn"
+    (click)="reset()"
+    title="Restart this timer"
+    aria-label="Restart this timer"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" />
+    </svg>
+  </button>
+  <button class="primary-btn" (click)="toggle()">{{ primaryLabel() }}</button>
+  <button
+    class="icon-btn"
+    (click)="skip()"
+    title="Skip to the next timer"
+    aria-label="Skip to the next timer"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l8.5 6L6 18V6zm10 0h2v12h-2z" /></svg>
+  </button>
+</div>
+
+<footer class="footer">
+  <div
+    class="cycle"
+    [title]="
+      store.state().completedInCycle +
+      ' of ' +
+      cycleDots().length +
+      ' focus sessions until a long break'
+    "
+  >
+    @for (done of cycleDots(); track $index) {
+      <span class="dot" [class.done]="done"></span>
+    }
+  </div>
+  <div class="today">{{ store.state().completedToday }} done today</div>
+</footer>
+
+@if (store.alertsOff() && !store.alertHintDismissed()) {
+  <aside class="hint">
+    <span>Get an alert when time's up?</span>
+    <button class="link" (click)="openSettings.emit()">Turn on</button>
+    <button
+      class="icon-btn ghost close"
+      (click)="store.dismissAlertHint()"
+      aria-label="Dismiss"
+      title="Dismiss"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M18.3 7.1 16.9 5.7 12 10.6 7.1 5.7 5.7 7.1l4.9 4.9-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"
+        />
+      </svg>
+    </button>
+  </aside>
+}

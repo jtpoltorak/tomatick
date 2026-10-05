@@ -1,0 +1,149 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.phases {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surface);
+}
+.phase-pill {
+  flex: 1;
+  padding: 5px 2px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.phase-pill:hover:not(:disabled):not(.active) {
+  color: var(--fg);
+}
+.phase-pill:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.phase-pill.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.dial {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring circle {
+  fill: none;
+  stroke-width: 8;
+}
+.ring-track {
+  stroke: var(--track);
+}
+.ring-progress {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition:
+    stroke-dashoffset 0.25s linear,
+    stroke 0.3s;
+}
+.dial-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.clock {
+  font-size: 48px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+}
+.status {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.primary-btn {
+  min-width: 120px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 15px;
+}
+.primary-btn:hover {
+  filter: brightness(1.08);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+.cycle {
+  display: flex;
+  gap: 4px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--track);
+}
+.dot.done {
+  background: var(--accent);
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px 6px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+}
+.hint span {
+  flex: 1;
+}
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-weight: 500;
+}
+.close {
+  width: 24px;
+  height: 24px;
+}
+.close svg {
+  width: 14px;
+  height: 14px;
+}
