@@ -28,7 +28,7 @@ that come from using, or not being able to use, Tomatick.
 
 ## Ownership
 
-Tomatick, its code and its design are © 2026 YOUR NAME. Third-party parts keep
+Tomatick, its code and its design are © 2026 Jon Poltorak. Third-party parts keep
 their own licenses: the Rubik font is under the SIL Open Font License
 (`public/fonts/OFL.txt`), and Angular's licenses ship in the extension as
 `3rdpartylicenses.txt`.
@@ -45,4 +45,4 @@ any time by uninstalling it.
 
 ## Contact
 
-YOUR NAME · support@example.com
+Jon Poltorak · tomatick.support@gmail.com

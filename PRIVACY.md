@@ -39,4 +39,4 @@ extension's store listing, with a new date at the top.
 
 ## Contact
 
-YOUR NAME · support@example.com
+Jon Poltorak · tomatick.support@gmail.com
