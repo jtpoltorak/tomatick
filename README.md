@@ -3,7 +3,8 @@
 **Tomatick: Pomodoro Focus Timer** is a simple, customizable Pomodoro timer for Chrome. It defaults to the classic
 technique: 25-minute focus sessions, 5-minute short breaks, and a 15-minute
 long break after every 4 sessions. All of that is adjustable. Sound and
-notification alerts are available but off until you turn them on.
+notification alerts and a site blocker are available but off until you turn
+them on.
 
 <p>
   <img src="docs/popup.png" alt="Timer" width="300" />
@@ -19,7 +20,12 @@ notification alerts are available but off until you turn them on.
 - Optional auto-start for breaks and for focus sessions.
 - A count of focus sessions done today, and dots showing progress toward the long break.
 - **Alt+Shift+P** opens the popup.
+- An optional site blocker: during focus sessions, sites on your list (YouTube, Reddit, and friends) show a "stay focused" page instead, with the time left. Breaks and pauses unblock them.
 - Follows your system's light or dark theme.
+
+<p>
+  <img src="docs/blocked.png" alt="Blocked site page" width="600" />
+</p>
 
 ## Development
 
@@ -52,23 +58,27 @@ the timer. Chrome also "puts the counter away" (shuts the worker down) when
 it's idle, so the timer never counts down in memory. Instead it writes down
 _when_ the timer ends and asks Chrome to wake it at that moment.
 
-| Path                           | What it is                                                                                                                                                                                                                               |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/shared/timer.ts`          | The pure timer state machine (start, pause, reset, next phase). No `chrome.*` calls, so it's easy to test.                                                                                                                               |
-| `src/background/background.ts` | The service worker. Owns the timer state in `chrome.storage.local`, schedules a `chrome.alarms` alarm for the end time, updates the badge, and fires the alerts. Catches up on browser startup if a timer ended while Chrome was closed. |
-| `src/offscreen/offscreen.ts`   | Service workers can't play audio, so the worker opens a hidden [offscreen document](https://developer.chrome.com/docs/extensions/reference/api/offscreen) to play the alert sound.                                                       |
-| `src/shared/sounds.ts`         | The alert sounds, synthesized with the Web Audio API (no audio files).                                                                                                                                                                   |
-| `src/popup/`                   | The Angular popup. `PomodoroStore` mirrors storage into signals and sends commands to the worker; `TimerView` and `SettingsView` are the two screens.                                                                                    |
-| `public/`                      | `manifest.json`, icons, and the small static pages, copied into `dist/` as-is.                                                                                                                                                           |
-| `scripts/build.mjs`            | Runs `ng build` for the popup, then esbuild for the worker and offscreen script.                                                                                                                                                         |
+| Path                           | What it is                                                                                                                                                                                                                                                       |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/shared/timer.ts`          | The pure timer state machine (start, pause, reset, next phase). No `chrome.*` calls, so it's easy to test.                                                                                                                                                       |
+| `src/background/background.ts` | The service worker. Owns the timer state in `chrome.storage.local`, schedules a `chrome.alarms` alarm for the end time, updates the badge, and fires the alerts. Catches up on browser startup if a timer ended while Chrome was closed.                         |
+| `src/offscreen/offscreen.ts`   | Service workers can't play audio, so the worker opens a hidden [offscreen document](https://developer.chrome.com/docs/extensions/reference/api/offscreen) to play the alert sound.                                                                               |
+| `src/shared/blocker.ts`        | Site blocker helpers: cleaning up typed sites and deciding when to block. The worker turns a [declarativeNetRequest](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest) redirect rule on during focus sessions and off otherwise. |
+| `src/blocked/blocked.ts`       | The "stay focused" page blocked sites redirect to. It shows the time left and offers a link back once the session ends.                                                                                                                                          |
+| `src/shared/sounds.ts`         | The alert sounds, synthesized with the Web Audio API (no audio files).                                                                                                                                                                                           |
+| `src/popup/`                   | The Angular popup. `PomodoroStore` mirrors storage into signals and sends commands to the worker; `TimerView` and `SettingsView` are the two screens.                                                                                                            |
+| `public/`                      | `manifest.json`, icons, and the small static pages, copied into `dist/` as-is.                                                                                                                                                                                   |
+| `scripts/build.mjs`            | Runs `ng build` for the popup, then esbuild for the worker and offscreen script.                                                                                                                                                                                 |
 
 Settings are saved to `chrome.storage.sync`, so they follow your Chrome profile.
 
 ## Publishing to the Chrome Web Store
 
-The extension only asks for permissions Chrome shows no install warning for,
-with no host permissions, remote code, network requests, or data collection,
-which keeps review straightforward.
+At install, the extension only asks for permissions Chrome shows no install
+warning for. The site blocker's access to sites is an optional permission
+Chrome asks for only when someone turns the blocker on, and it's handed back
+when they turn it off. There's no remote code, network requests, or data
+collection, which keeps review straightforward.
 
 1. Bump `version` in `package.json` (the build copies it into the manifest).
 2. Run `npm run package` and upload the zip it writes.
@@ -79,3 +89,4 @@ which keeps review straightforward.
    - `notifications`: show the optional "time's up" notification.
    - `offscreen`: play the optional "time's up" sound, since service workers can't play audio.
    - `storage`: remember the timer and the user's settings.
+   - `declarativeNetRequestWithHostAccess` and `<all_urls>` (both optional, requested only when the user turns on the site blocker): redirect the sites the user listed to the extension's "stay focused" page during focus sessions.

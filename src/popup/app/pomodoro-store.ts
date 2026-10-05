@@ -1,4 +1,5 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal } from '@angular/core';
+import { BLOCKER_PERMISSIONS } from '../../shared/blocker';
 import { sendCommand, type Command } from '../../shared/messages';
 import { loadSettings, loadState, saveSettings } from '../../shared/storage';
 import {
@@ -23,6 +24,8 @@ export class PomodoroStore {
   readonly settings = signal<Settings>(DEFAULT_SETTINGS);
   readonly loaded = signal(false);
   readonly alertHintDismissed = signal(true);
+  /** Whether the user has granted the site access the blocker needs. */
+  readonly blockerAccess = signal(false);
 
   /** Ticks while the timer runs so the countdown re-renders. */
   private readonly now = signal(Date.now());
@@ -54,11 +57,13 @@ export class PomodoroStore {
   }
 
   async refresh(): Promise<void> {
-    const [state, settings, ui] = await Promise.all([
+    const [state, settings, ui, access] = await Promise.all([
       loadState(),
       loadSettings(),
       chrome.storage.local.get(HINT_KEY),
+      chrome.permissions.contains(BLOCKER_PERMISSIONS),
     ]);
+    this.blockerAccess.set(access);
     this.state.set(state);
     this.settings.set(settings);
     this.alertHintDismissed.set(Boolean(ui[HINT_KEY]));
@@ -79,6 +84,13 @@ export class PomodoroStore {
   async updateSettings(settings: Settings): Promise<void> {
     this.settings.set(settings);
     await saveSettings(settings);
+  }
+
+  /** Must be called straight from a click, since Chrome only prompts on a user gesture. */
+  async requestBlockerAccess(): Promise<boolean> {
+    const granted = await chrome.permissions.request(BLOCKER_PERMISSIONS);
+    this.blockerAccess.set(granted);
+    return granted;
   }
 
   async dismissAlertHint(): Promise<void> {

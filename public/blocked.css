@@ -1,0 +1,101 @@
+/* Rubik (SIL Open Font License, see fonts/OFL.txt), bundled like the popup's. */
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('fonts/rubik-latin.woff2') format('woff2');
+}
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --muted: #6e7781;
+  --accent: #d9480f;
+  --on-accent: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1f24;
+    --fg: #e6edf3;
+    --muted: #9198a1;
+    --accent: #ff7a45;
+    --on-accent: #1c1f24;
+  }
+}
+
+html {
+  background: var(--bg);
+}
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--fg);
+  font:
+    16px/1.5 Rubik,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  text-align: center;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+}
+h1 {
+  margin: 16px 0 4px;
+  font-size: 28px;
+  font-weight: 600;
+}
+p {
+  margin: 0;
+  color: var(--muted);
+}
+.site {
+  color: var(--fg);
+  font-weight: 500;
+}
+.clock {
+  margin: 20px 0 4px;
+  color: var(--accent);
+  font-size: 48px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+.clock:empty {
+  display: none;
+}
+.button {
+  margin-top: 20px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+  text-decoration: none;
+}
+.button[hidden] {
+  display: none;
+}
+.quiet {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.quiet:hover {
+  color: var(--fg);
+}
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
