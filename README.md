@@ -1,7 +1,7 @@
 # Tomatick
 
-**Tomatick: Pomodoro Focus Timer** is a simple, customizable Pomodoro timer for Chrome. It defaults to the classic
-technique: 25-minute focus sessions, 5-minute short breaks, and a 15-minute
+**Tomatick: Focus Timer** is a simple, customizable focus timer for Chrome, based on the
+Pomodoro Technique®. It defaults to the classic technique: 25-minute focus sessions, 5-minute short breaks, and a 15-minute
 long break after every 4 sessions. All of that is adjustable. Sound and
 notification alerts and a site blocker are available but off until you turn
 them on.
@@ -83,12 +83,13 @@ Chrome asks for only when someone turns the blocker on, and it's handed back
 when they turn it off. There's no remote code, network requests, or data
 collection, which keeps review straightforward.
 
+1. Keep "Pomodoro" out of the extension's name and store title: Pomodoro® is a registered trademark of Francesco Cirillo, whose [trademark guidelines](https://www.pomodorotechnique.com/pomodoro-trademark-guidelines/) don't allow it in product names. Describing the technique is fine with the ® and the not-affiliated note (see Help and `legal.html#credits`).
 1. Fill in your name and support email in `src/shared/about.ts`, `PRIVACY.md`, and `TERMS.md`.
-2. Bump `version` in `package.json` (the build copies it into the manifest).
-3. Run `npm run package` and upload the zip it writes.
-4. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Use the support email you want to keep: the account's email can't be changed later. Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
-5. Listing assets: at least one 1280x800 screenshot, a 440x280 promo tile, and the 128px icon (`public/icons/icon-128.png`).
-6. Privacy tab: privacy policy URL `https://github.com/jtpoltorak/tomatick/blob/main/PRIVACY.md`. Certify that no user data is collected. Single purpose: "A Pomodoro timer that alternates focus sessions and breaks." Permission justifications:
+1. Bump `version` in `package.json` (the build copies it into the manifest).
+1. Run `npm run package` and upload the zip it writes.
+1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Use the support email you want to keep: the account's email can't be changed later. Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
+1. Listing assets: at least one 1280x800 screenshot, a 440x280 promo tile, and the 128px icon (`public/icons/icon-128.png`).
+1. Privacy tab: privacy policy URL `https://github.com/jtpoltorak/tomatick/blob/main/PRIVACY.md`. Certify that no user data is collected. Single purpose: "A focus timer that alternates focus sessions and breaks." Permission justifications:
    - `alarms`: wake the extension when a focus session or break ends.
    - `notifications`: show the optional "time's up" notification.
    - `offscreen`: play the optional "time's up" sound, since service workers can't play audio.

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Tomatick: Pomodoro Focus Timer",
+  "name": "Tomatick: Focus Timer",
   "short_name": "Tomatick",
   "version": "1.0.0",
-  "description": "A simple, customizable Pomodoro timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
+  "description": "A simple, customizable focus timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "minimum_chrome_version": "120",
   "homepage_url": "https://github.com/jtpoltorak/tomatick",
   "permissions": ["alarms", "notifications", "offscreen", "storage"],

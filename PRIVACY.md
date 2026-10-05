@@ -1,4 +1,4 @@
-# Privacy policy: Tomatick (Pomodoro Focus Timer)
+# Privacy policy: Tomatick (Focus Timer)
 
 _Last updated October 5, 2026_
 
