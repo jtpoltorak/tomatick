@@ -4,9 +4,9 @@
 
 export const ABOUT = {
   /** Your legal name, as it should appear in the copyright line. */
-  author: 'YOUR NAME',
+  author: 'Jon Poltorak',
   /** The support address people can write to. */
-  email: 'support@example.com',
+  email: 'tomatick.support@gmail.com',
   copyrightYear: 2026,
   sourceUrl: 'https://github.com/jtpoltorak/tomatick',
   /** When the privacy policy or terms last changed in a way users should know about. */
