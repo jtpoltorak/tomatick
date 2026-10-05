@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Pomodoro Focus Timer",
-  "short_name": "Pomodoro",
+  "name": "Tomatick: Pomodoro Focus Timer",
+  "short_name": "Tomatick",
   "version": "1.0.0",
   "description": "A simple, customizable Pomodoro timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "minimum_chrome_version": "120",
@@ -17,7 +17,7 @@
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Pomodoro",
+    "default_title": "Tomatick",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
@@ -39,7 +39,7 @@
       "suggested_key": {
         "default": "Alt+Shift+P"
       },
-      "description": "Open the Pomodoro timer"
+      "description": "Open Tomatick"
     }
   }
 }

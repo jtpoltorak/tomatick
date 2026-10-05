@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "pomodoro": {
+    "tomatick": {
       "projectType": "application",
       "schematics": {},
       "root": "",

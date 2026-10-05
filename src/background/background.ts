@@ -68,13 +68,13 @@ async function updateBadge(state: TimerState, justFinished = false): Promise<voi
     await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLORS[state.phase] });
     await chrome.action.setBadgeText({ text: '✓' });
     await chrome.action.setTitle({
-      title: `Pomodoro: time for your ${PHASE_LABELS[state.phase].toLowerCase()}`,
+      title: `Tomatick: time for your ${PHASE_LABELS[state.phase].toLowerCase()}`,
     });
     return;
   }
   if (state.status === 'idle') {
     await chrome.action.setBadgeText({ text: '' });
-    await chrome.action.setTitle({ title: `Pomodoro: ${PHASE_LABELS[state.phase]} ready` });
+    await chrome.action.setTitle({ title: `Tomatick: ${PHASE_LABELS[state.phase]} ready` });
     return;
   }
   const minutesLeft = Math.ceil(remainingMs(state, Date.now()) / 60_000);
@@ -84,7 +84,7 @@ async function updateBadge(state: TimerState, justFinished = false): Promise<voi
   await chrome.action.setBadgeText({ text: `${minutesLeft}m` });
   const verb = state.status === 'paused' ? 'paused' : 'running';
   await chrome.action.setTitle({
-    title: `Pomodoro: ${PHASE_LABELS[state.phase]} ${verb}, ${minutesLeft} min left`,
+    title: `Tomatick: ${PHASE_LABELS[state.phase]} ${verb}, ${minutesLeft} min left`,
   });
 }
 

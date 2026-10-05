@@ -49,7 +49,7 @@ if (watch) {
   if (code !== 0) process.exit(code ?? 1);
   await esbuild.build(workerOptions);
   const version = await syncManifestVersion();
-  if (zip) await writeZip('dist', `pomodoro-focus-timer-${version}.zip`);
+  if (zip) await writeZip('dist', `tomatick-${version}.zip`);
 }
 
 /** Minimal zip writer (deflate, no dependencies) for the Web Store upload. */

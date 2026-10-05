@@ -1,6 +1,6 @@
-# Privacy policy: Pomodoro Focus Timer
+# Privacy policy: Tomatick (Pomodoro Focus Timer)
 
-Pomodoro Focus Timer does not collect, transmit, sell, or share any personal
+Tomatick does not collect, transmit, sell, or share any personal
 data.
 
 - The extension makes no network requests.
