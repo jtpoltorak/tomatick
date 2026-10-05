@@ -21,6 +21,7 @@ describe('HelpView', () => {
     const topics = Array.from(el.querySelectorAll('details summary')).map((s) => s.textContent);
     expect(topics).toEqual(['What it is', 'Who invented it', 'Why it works']);
     expect(el.textContent).toContain('Francesco Cirillo');
+    expect(el.querySelector('.trademark')?.textContent).toContain("isn't affiliated");
   });
 
   it('links to the contact address and the legal page', () => {

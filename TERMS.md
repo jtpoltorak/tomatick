@@ -1,4 +1,4 @@
-# Terms of use: Tomatick (Pomodoro Focus Timer)
+# Terms of use: Tomatick (Focus Timer)
 
 _Last updated October 5, 2026_
 
@@ -32,6 +32,10 @@ Tomatick, its code and its design are © 2026 YOUR NAME. Third-party parts keep
 their own licenses: the Rubik font is under the SIL Open Font License
 (`public/fonts/OFL.txt`), and Angular's licenses ship in the extension as
 `3rdpartylicenses.txt`.
+
+Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco
+Cirillo. Tomatick is an independent timer and isn't affiliated with,
+associated with, or endorsed by Francesco Cirillo or the Pomodoro Technique®.
 
 ## Changes and ending
 

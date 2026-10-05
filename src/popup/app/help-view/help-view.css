@@ -72,6 +72,11 @@ nav a {
 nav a:hover {
   color: var(--fg);
 }
+.trademark {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
 .fine {
   color: var(--muted);
   font-size: 13px;

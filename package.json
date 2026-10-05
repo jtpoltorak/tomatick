@@ -31,7 +31,7 @@
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
   },
-  "description": "A simple, customizable Pomodoro timer Chrome extension (Manifest V3, Angular popup).",
+  "description": "A simple, customizable focus timer Chrome extension (Manifest V3, Angular popup).",
   "engines": {
     "node": ">=22.22.3"
   }
