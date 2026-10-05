@@ -46,7 +46,7 @@
   }
 }
 
-/* The accent follows the current phase: tomato for focus, green and blue for breaks. */
+/* The accent follows the current phase: orange for focus, green and blue for breaks. */
 :root[data-phase='shortBreak'] {
   --accent: #2f9e44;
 }
