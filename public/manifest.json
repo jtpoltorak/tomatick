@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "description": "A simple, customizable Pomodoro timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "minimum_chrome_version": "120",
+  "homepage_url": "https://github.com/jtpoltorak/tomatick",
   "permissions": ["alarms", "notifications", "offscreen", "storage"],
   "optional_permissions": ["declarativeNetRequestWithHostAccess"],
   "optional_host_permissions": ["<all_urls>"],

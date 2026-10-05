@@ -22,6 +22,7 @@ them on.
 - **Alt+Shift+P** opens the popup.
 - An optional site blocker: during focus sessions, sites on your list (YouTube, Reddit, and friends) show a "stay focused" page instead, with the time left. Breaks and pauses unblock them.
 - Follows your system's light or dark theme.
+- A **Help** screen (the ? in the popup) with a quick how-to, a contact address, and links to the privacy policy, terms of use, and credits.
 
 <p>
   <img src="docs/blocked.png" alt="Blocked site page" width="600" />
@@ -65,6 +66,8 @@ _when_ the timer ends and asks Chrome to wake it at that moment.
 | `src/offscreen/offscreen.ts`   | Service workers can't play audio, so the worker opens a hidden [offscreen document](https://developer.chrome.com/docs/extensions/reference/api/offscreen) to play the alert sound.                                                                               |
 | `src/shared/blocker.ts`        | Site blocker helpers: cleaning up typed sites and deciding when to block. The worker turns a [declarativeNetRequest](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest) redirect rule on during focus sessions and off otherwise. |
 | `src/blocked/blocked.ts`       | The "stay focused" page blocked sites redirect to. It shows the time left and offers a link back once the session ends.                                                                                                                                          |
+| `src/shared/about.ts`          | The author name, support email, copyright year, and legal "last updated" date shown on the Help screen and legal page. Fill these in before publishing; `npm run package` warns until you do.                                                                    |
+| `public/legal.html`            | The privacy policy, terms of use, and credits page, opened from Help. [PRIVACY.md](PRIVACY.md) and [TERMS.md](TERMS.md) carry the same text for the Web Store; change them together.                                                                             |
 | `src/shared/sounds.ts`         | The alert sounds, synthesized with the Web Audio API (no audio files).                                                                                                                                                                                           |
 | `src/popup/`                   | The Angular popup. `PomodoroStore` mirrors storage into signals and sends commands to the worker; `TimerView` and `SettingsView` are the two screens.                                                                                                            |
 | `public/`                      | `manifest.json`, icons, and the small static pages, copied into `dist/` as-is.                                                                                                                                                                                   |
@@ -80,11 +83,12 @@ Chrome asks for only when someone turns the blocker on, and it's handed back
 when they turn it off. There's no remote code, network requests, or data
 collection, which keeps review straightforward.
 
-1. Bump `version` in `package.json` (the build copies it into the manifest).
-2. Run `npm run package` and upload the zip it writes.
-3. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee).
-4. Listing assets: at least one 1280x800 screenshot, a 440x280 promo tile, and the 128px icon (`public/icons/icon-128.png`).
-5. Privacy tab: use [PRIVACY.md](PRIVACY.md). Single purpose: "A Pomodoro timer that alternates focus sessions and breaks." Permission justifications:
+1. Fill in your name and support email in `src/shared/about.ts`, `PRIVACY.md`, and `TERMS.md`.
+2. Bump `version` in `package.json` (the build copies it into the manifest).
+3. Run `npm run package` and upload the zip it writes.
+4. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Use the support email you want to keep: the account's email can't be changed later. Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
+5. Listing assets: at least one 1280x800 screenshot, a 440x280 promo tile, and the 128px icon (`public/icons/icon-128.png`).
+6. Privacy tab: privacy policy URL `https://github.com/jtpoltorak/tomatick/blob/main/PRIVACY.md`. Certify that no user data is collected. Single purpose: "A Pomodoro timer that alternates focus sessions and breaks." Permission justifications:
    - `alarms`: wake the extension when a focus session or break ends.
    - `notifications`: show the optional "time's up" notification.
    - `offscreen`: play the optional "time's up" sound, since service workers can't play audio.
