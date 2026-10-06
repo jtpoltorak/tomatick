@@ -8,7 +8,7 @@ export const ABOUT = {
   /** The support address people can write to. */
   email: 'support@tomomomento.com',
   copyrightYear: 2026,
-  sourceUrl: 'https://github.com/jtpoltorak/tomatick',
+  sourceUrl: 'https://github.com/jtpoltorak/tomomomento',
   /** When the privacy policy or terms last changed in a way users should know about. */
   legalUpdated: 'October 6, 2026',
 } as const;

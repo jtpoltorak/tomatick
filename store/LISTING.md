@@ -38,7 +38,7 @@ Private by design
 Tomomomento has no account, no ads, no analytics, and no tracking. It makes no network requests. Your settings stay in your browser.
 
 Free and open source
-Tomomomento is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomatick. It was built with Claude Code, Anthropic's AI coding assistant.
+Tomomomento is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomomomento. It was built with Claude Code, Anthropic's AI coding assistant.
 
 Questions or ideas? Email support@tomomomento.com.
 
@@ -61,9 +61,9 @@ Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco C
 
 **Official URL:** none (needs a verified domain; skip it)
 
-**Homepage URL:** https://github.com/jtpoltorak/tomatick
+**Homepage URL:** https://github.com/jtpoltorak/tomomomento
 
-**Support URL:** https://github.com/jtpoltorak/tomatick/issues
+**Support URL:** https://github.com/jtpoltorak/tomomomento/issues
 
 **Mature content:** No
 
@@ -92,7 +92,7 @@ Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco C
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose.
 - I do not use or transfer user data to determine creditworthiness or for lending purposes.
 
-**Privacy policy URL:** https://github.com/jtpoltorak/tomatick/blob/main/PRIVACY.md
+**Privacy policy URL:** https://github.com/jtpoltorak/tomomomento/blob/main/PRIVACY.md
 
 ## Distribution tab
 
