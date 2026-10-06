@@ -6,7 +6,7 @@ export const ABOUT = {
   /** Your legal name, as it should appear in the copyright line. */
   author: 'Jon Poltorak',
   /** The support address people can write to. */
-  email: 'tomatick.support@gmail.com',
+  email: 'support@tomomomento.com',
   copyrightYear: 2026,
   sourceUrl: 'https://github.com/jtpoltorak/tomatick',
   /** When the privacy policy or terms last changed in a way users should know about. */

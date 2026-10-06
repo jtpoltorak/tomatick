@@ -54,4 +54,4 @@ extension's store listing, with a new date at the top.
 
 ## Contact
 
-Jon Poltorak · tomatick.support@gmail.com
+Jon Poltorak · support@tomomomento.com

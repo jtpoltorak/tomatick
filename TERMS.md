@@ -45,4 +45,4 @@ any time by uninstalling it.
 
 ## Contact
 
-Jon Poltorak · tomatick.support@gmail.com
+Jon Poltorak · support@tomomomento.com

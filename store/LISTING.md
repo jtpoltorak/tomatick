@@ -40,7 +40,7 @@ Tomomomento has no account, no ads, no analytics, and no tracking. It makes no n
 Free and open source
 Tomomomento is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomatick. It was built with Claude Code, Anthropic's AI coding assistant.
 
-Questions or ideas? Email tomatick.support@gmail.com.
+Questions or ideas? Email support@tomomomento.com.
 
 Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo. Tomomomento isn't affiliated with or endorsed by Francesco Cirillo.
 ```
