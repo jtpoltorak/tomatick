@@ -5,6 +5,8 @@
     "build": "node scripts/build.mjs",
     "watch": "node scripts/build.mjs --watch",
     "package": "node scripts/build.mjs --zip",
+    "build:web": "node scripts/build.mjs --web",
+    "start:web": "ng serve",
     "test": "ng test --watch=false",
     "test:watch": "ng test"
   },

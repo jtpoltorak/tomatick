@@ -1,0 +1,43 @@
+/* The web app uses the popup's styles as they are, plus a few page-level tweaks. */
+@import '../popup/styles.css';
+
+/*
+ * The popup loads its fonts from the extension's root (/fonts/...). The web app
+ * may be served from a subfolder (like GitHub Pages' /tomatick/), so point the
+ * same faces at files the build bundles next to the app.
+ */
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('../../public/fonts/rubik-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('../../public/fonts/rubik-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Same 320px card as the popup, centered on the page. */
+body {
+  padding: 24px 0;
+}
+@media (min-width: 480px) {
+  body {
+    padding-top: 48px;
+  }
+  app-root {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+}

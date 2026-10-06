@@ -24,9 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/popup/styles.css"
-            ],
+            "styles": ["src/popup/styles.css"],
             "index": "src/popup/index.html",
             "outputPath": {
               "base": "dist",
@@ -62,6 +60,26 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "web": {
+              "browser": "src/web/main.ts",
+              "index": "src/web/index.html",
+              "styles": ["src/web/styles.css"],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public",
+                  "ignore": ["manifest.json", "options.html", "offscreen.html", "blocked.*"]
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/web/public"
+                }
+              ],
+              "outputPath": {
+                "base": "dist-web",
+                "browser": ""
+              }
             }
           },
           "defaultConfiguration": "production"
@@ -70,6 +88,12 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "tsconfig.spec.json"
+          }
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "tomatick:build:development,web"
           }
         }
       }

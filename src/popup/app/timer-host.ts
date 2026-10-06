@@ -1,0 +1,40 @@
+import { InjectionToken } from '@angular/core';
+import type { Command, CommandResponse } from '../../shared/messages';
+import type { Settings, TimerState } from '../../shared/timer';
+
+/** Which build the UI is running in. A few labels and settings differ between them. */
+export type PlatformKind = 'extension' | 'web';
+
+export const PLATFORM = new InjectionToken<PlatformKind>('PLATFORM', {
+  providedIn: 'root',
+  factory: () => 'extension',
+});
+
+export interface HostSnapshot {
+  state: TimerState;
+  settings: Settings;
+  alertHintDismissed: boolean;
+  /** Whether the user has granted the site access the blocker needs. */
+  blockerAccess: boolean;
+}
+
+/**
+ * Where the timer actually runs. The UI only talks to this, so the same
+ * components work in the extension popup (backed by the background worker
+ * and chrome.storage) and on the web (backed by an in-page engine and
+ * localStorage).
+ */
+export interface TimerHost {
+  load(): Promise<HostSnapshot>;
+  /** Calls `listener` whenever the stored timer or settings change. Returns an unsubscribe. */
+  onChange(listener: () => void): () => void;
+  send(command: Command): Promise<CommandResponse>;
+  saveSettings(settings: Settings): Promise<void>;
+  /** Must be called straight from a click, since browsers only prompt on a user gesture. */
+  requestBlockerAccess(): Promise<boolean>;
+  /** Must be called straight from a click, since browsers only prompt on a user gesture. */
+  requestNotificationAccess(): Promise<boolean>;
+  dismissAlertHint(): Promise<void>;
+}
+
+export const TIMER_HOST = new InjectionToken<TimerHost>('TimerHost');

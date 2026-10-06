@@ -39,6 +39,11 @@ export function createFakeStore(overrides: Partial<TimerState> = {}) {
       fake.blockerAccess.set(fake.grantBlockerAccess);
       return fake.grantBlockerAccess;
     },
+    /** Tests set this to decide how the notification prompt is answered. */
+    grantNotificationAccess: true,
+    async requestNotificationAccess() {
+      return fake.grantNotificationAccess;
+    },
     async dismissAlertHint() {
       fake.alertHintDismissed.set(true);
     },

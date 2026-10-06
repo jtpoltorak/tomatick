@@ -98,8 +98,16 @@
     }
     <label class="switch-row">
       <span>Show a notification</span>
-      <input type="checkbox" role="switch" formControlName="notificationsEnabled" />
+      <input
+        type="checkbox"
+        role="switch"
+        formControlName="notificationsEnabled"
+        (change)="toggleNotifications($event)"
+      />
     </label>
+    @if (notificationError()) {
+      <p class="note error" role="alert">{{ notificationError() }}</p>
+    }
     <label class="switch-row">
       <span>Start breaks automatically</span>
       <input type="checkbox" role="switch" formControlName="autoStartBreaks" />
@@ -112,55 +120,62 @@
 
   <section>
     <h2>Site blocker</h2>
-    <label class="switch-row">
-      <span>Block distracting sites during focus</span>
-      <input
-        type="checkbox"
-        role="switch"
-        [checked]="blockerOn()"
-        (change)="toggleBlocker($event)"
-      />
-    </label>
-    @if (blockerOn()) {
-      <div class="sub-options">
-        <ul class="sites" aria-label="Blocked sites">
-          @for (site of blockedSites(); track site) {
-            <li>
-              <span>{{ site }}</span>
-              <button
-                type="button"
-                class="remove"
-                (click)="removeSite(site)"
-                [attr.aria-label]="'Unblock ' + site"
-                title="Remove"
-              >
-                ×
-              </button>
-            </li>
-          } @empty {
-            <li class="empty">No sites yet. Add one below.</li>
-          }
-        </ul>
-        <div class="add-site">
-          <input
-            #newSite
-            type="text"
-            id="newSite"
-            placeholder="Add a site, like news.com"
-            aria-label="Site to block"
-            autocomplete="off"
-            spellcheck="false"
-            (keydown.enter)="addSite(newSite)"
-            (input)="siteError.set('')"
-          />
-          <button type="button" class="add-btn" (click)="addSite(newSite)">Add</button>
-        </div>
-        @if (siteError()) {
-          <p class="note error" role="alert">{{ siteError() }}</p>
-        }
-      </div>
+    @if (isWeb) {
+      <p class="note">
+        Blocking sites needs the Tomatick Chrome extension, because a web page can't change what
+        other tabs load.
+      </p>
     } @else {
-      <p class="note">Chrome will ask to let Tomatick redirect sites when you turn this on.</p>
+      <label class="switch-row">
+        <span>Block distracting sites during focus</span>
+        <input
+          type="checkbox"
+          role="switch"
+          [checked]="blockerOn()"
+          (change)="toggleBlocker($event)"
+        />
+      </label>
+      @if (blockerOn()) {
+        <div class="sub-options">
+          <ul class="sites" aria-label="Blocked sites">
+            @for (site of blockedSites(); track site) {
+              <li>
+                <span>{{ site }}</span>
+                <button
+                  type="button"
+                  class="remove"
+                  (click)="removeSite(site)"
+                  [attr.aria-label]="'Unblock ' + site"
+                  title="Remove"
+                >
+                  ×
+                </button>
+              </li>
+            } @empty {
+              <li class="empty">No sites yet. Add one below.</li>
+            }
+          </ul>
+          <div class="add-site">
+            <input
+              #newSite
+              type="text"
+              id="newSite"
+              placeholder="Add a site, like news.com"
+              aria-label="Site to block"
+              autocomplete="off"
+              spellcheck="false"
+              (keydown.enter)="addSite(newSite)"
+              (input)="siteError.set('')"
+            />
+            <button type="button" class="add-btn" (click)="addSite(newSite)">Add</button>
+          </div>
+          @if (siteError()) {
+            <p class="note error" role="alert">{{ siteError() }}</p>
+          }
+        </div>
+      } @else {
+        <p class="note">Chrome will ask to let Tomatick redirect sites when you turn this on.</p>
+      }
     }
   </section>
 

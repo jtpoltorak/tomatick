@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { ABOUT } from '../../../shared/about';
+import { PLATFORM } from '../timer-host';
 import { HelpView } from './help-view';
 
 describe('HelpView', () => {
-  function setup() {
-    TestBed.configureTestingModule({ imports: [HelpView] });
+  function setup(platform: 'extension' | 'web' = 'extension') {
+    TestBed.configureTestingModule({
+      imports: [HelpView],
+      providers: [{ provide: PLATFORM, useValue: platform }],
+    });
     const fixture = TestBed.createComponent(HelpView);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;
@@ -33,5 +37,12 @@ describe('HelpView', () => {
     );
     expect(legal).toEqual(['legal.html#privacy', 'legal.html#terms', 'legal.html#credits']);
     expect(el.querySelector('.fine')?.textContent).toContain(`© ${ABOUT.copyrightYear}`);
+  });
+
+  it('describes the web app without extension-only features', () => {
+    const el = setup('web');
+    expect(el.textContent).not.toContain('Alt+Shift+P');
+    expect(el.textContent).not.toContain('site blocker');
+    expect(el.textContent).toContain("tab's title shows the time left");
   });
 });

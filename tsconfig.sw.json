@@ -1,0 +1,10 @@
+/* Type-checks the web app's service worker, which runs with worker globals instead of the DOM. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "WebWorker"],
+    "types": [],
+    "noEmit": true
+  },
+  "files": ["src/web/sw.ts"]
+}
