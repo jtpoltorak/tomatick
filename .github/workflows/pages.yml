@@ -1,6 +1,7 @@
-# Builds the web app and publishes it to GitHub Pages.
-# One-time setup: Settings -> Pages -> Source: GitHub Actions.
-name: Deploy web app
+# Runs the tests on every push to main, then publishes pages-redirect/ to
+# GitHub Pages so the old github.io address forwards to https://tomomomento.com
+# (the web app itself is hosted on Railway; see railway.json).
+name: Test and redirect GitHub Pages
 
 on:
   push:
@@ -27,10 +28,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - run: npm run build:web
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist-web
+          path: pages-redirect
 
   deploy:
     needs: build

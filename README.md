@@ -119,12 +119,13 @@ One-time setup:
 To try the production server locally: `docker build -t tomomomento-web . && docker run -p 8080:8080 tomomomento-web`,
 then open http://localhost:8080.
 
-### Deploying to GitHub Pages
+### The old GitHub Pages address
 
-[.github/workflows/pages.yml](.github/workflows/pages.yml) builds `dist-web/`
-and publishes it on every push to `main`. It needs a one-time switch: in the
-repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The
-app is then at `https://<user>.github.io/tomomomento/`.
+The web app used to live at `https://jtpoltorak.github.io/tomomomento/`.
+[.github/workflows/pages.yml](.github/workflows/pages.yml) now runs the tests
+on every push to `main` and publishes [pages-redirect/](pages-redirect) there
+instead: a page that forwards visitors to the same page on tomomomento.com, and
+a service worker that clears the old offline copy from returning visitors.
 
 ## How it works
 
