@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "tomatick": {
+    "tomomomento": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -93,7 +93,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "buildTarget": "tomatick:build:development,web"
+            "buildTarget": "tomomomento:build:development,web"
           }
         }
       }

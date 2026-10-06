@@ -1,12 +1,12 @@
 # Chrome Web Store listing
 
 Everything to paste into the [Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-for Tomatick 1.0.0. Images are in [`images/`](images); regenerate them with
+for Tomomomento 1.0.0. Images are in [`images/`](images); regenerate them with
 `node scripts/store-images.mjs` after UI changes.
 
 ## Store listing tab
 
-**Title** (from the manifest): Tomatick: Focus Timer
+**Title** (from the manifest): Tomomomento: Focus Timer
 
 **Summary** (from the manifest description, 132 characters max):
 
@@ -19,7 +19,7 @@ for Tomatick 1.0.0. Images are in [`images/`](images); regenerate them with
 **Description:**
 
 ```text
-Tomatick is a simple, free focus timer. Work in 25-minute focus sessions with short breaks in between and a longer break after every four, the rhythm made popular by the Pomodoro Technique®. Change any of the times to suit you.
+Tomomomento is a simple, free focus timer. Work in 25-minute focus sessions with short breaks in between and a longer break after every four, the rhythm made popular by the Pomodoro Technique®. Change any of the times to suit you.
 
 It's built to stay out of your way: one click to start, a countdown on the toolbar icon, and nothing to sign up for. Sounds, notifications, and the site blocker are all off until you turn them on.
 
@@ -32,17 +32,17 @@ Features
 • An optional site blocker that shows a "stay focused" page for the sites you choose, only during focus sessions
 • A built-in guide to the technique and how to use it
 • Light and dark themes that follow your system
-• Alt+Shift+P opens Tomatick from anywhere in Chrome
+• Alt+Shift+P opens Tomomomento from anywhere in Chrome
 
 Private by design
-Tomatick has no account, no ads, no analytics, and no tracking. It makes no network requests. Your settings stay in your browser.
+Tomomomento has no account, no ads, no analytics, and no tracking. It makes no network requests. Your settings stay in your browser.
 
 Free and open source
-Tomatick is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomatick. It was built with Claude Code, Anthropic's AI coding assistant.
+Tomomomento is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomatick. It was built with Claude Code, Anthropic's AI coding assistant.
 
 Questions or ideas? Email tomatick.support@gmail.com.
 
-Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo. Tomatick isn't affiliated with or endorsed by Francesco Cirillo.
+Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo. Tomomomento isn't affiliated with or endorsed by Francesco Cirillo.
 ```
 
 **Store icon:** `public/icons/icon-128.png`

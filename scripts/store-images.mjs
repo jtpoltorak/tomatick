@@ -10,7 +10,7 @@ import { chromium } from 'playwright';
 
 // A headless browser can't click "Allow" on the site blocker's permission prompt,
 // so load a copy of dist/ with the blocker's optional permissions made required.
-const dist = await mkdtemp(join(tmpdir(), 'tomatick-'));
+const dist = await mkdtemp(join(tmpdir(), 'tomomomento-'));
 await cp('dist', dist, { recursive: true });
 const manifest = JSON.parse(await readFile(join(dist, 'manifest.json'), 'utf8'));
 manifest.permissions.push(...manifest.optional_permissions);
@@ -182,9 +182,9 @@ await render(
   `${out}/promo-small.png`,
   440,
   280,
-  `<div class="frame" style="width:440px;height:280px;background:linear-gradient(135deg,#ff7a45,#d9480f);justify-content:center;gap:20px">
-    <div class="badge" style="width:136px;height:136px"><img src="${icon}" style="width:104px;height:104px"></div>
-    <div style="color:#fff;font-size:44px;font-weight:700">Tomatick</div>
+  `<div class="frame" style="width:440px;height:280px;background:linear-gradient(135deg,#ff7a45,#d9480f);justify-content:center;gap:16px">
+    <div class="badge" style="width:100px;height:100px"><img src="${icon}" style="width:76px;height:76px"></div>
+    <div style="color:#fff;font-size:36px;font-weight:700">Tomomomento</div>
   </div>`,
 );
 await render(
@@ -194,7 +194,7 @@ await render(
   `<div class="frame" style="width:1400px;height:560px;background:linear-gradient(135deg,#ff7a45,#d9480f);padding:0 120px;gap:80px">
     <div style="flex:1;color:#fff">
       <div class="badge" style="width:112px;height:112px;margin-bottom:28px"><img src="${icon}" style="width:84px;height:84px"></div>
-      <div style="font-size:72px;font-weight:700;line-height:1">Tomatick</div>
+      <div style="font-size:72px;font-weight:700;line-height:1">Tomomomento</div>
       <div style="font-size:32px;margin-top:16px;opacity:.92">A simple, free focus timer</div>
     </div>
     <img class="shot" src="${focus}" style="width:340px;align-self:flex-end;margin-bottom:-60px">

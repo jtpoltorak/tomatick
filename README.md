@@ -1,6 +1,6 @@
-# Tomatick
+# Tomomomento
 
-**Tomatick: Focus Timer** is a simple, customizable focus timer for Chrome, based on the
+**Tomomomento: Focus Timer** is a simple, customizable focus timer for Chrome, based on the
 Pomodoro Technique®. It defaults to the classic technique: 25-minute focus sessions, 5-minute short breaks, and a 15-minute
 long break after every 4 sessions. All of that is adjustable. Sound and
 notification alerts and a site blocker are available but off until you turn
@@ -30,7 +30,7 @@ them on.
 
 ## Built with Claude
 
-Tomatick is a portfolio project, designed and built by Jon Poltorak working with
+Tomomomento is a portfolio project, designed and built by Jon Poltorak working with
 [Claude Code](https://claude.com/claude-code), Anthropic's AI coding assistant.
 Claude wrote most of the code, tests, and docs from plain-language requests,
 and each change landed as a reviewed pull request; the
@@ -50,7 +50,7 @@ npm install
 npm run build     # builds the extension into dist/
 npm test          # unit and component tests (Vitest)
 npm run watch     # rebuilds on change
-npm run package   # builds and writes tomatick-<version>.zip for the Web Store
+npm run package   # builds and writes tomomomento-<version>.zip for the Web Store
 ```
 
 ### Load it in Chrome
@@ -58,7 +58,7 @@ npm run package   # builds and writes tomatick-<version>.zip for the Web Store
 1. Open `chrome://extensions`.
 2. Turn on **Developer mode** (top right).
 3. Click **Load unpacked** and choose the `dist/` folder.
-4. Pin the Tomatick icon from the puzzle-piece menu so the badge is visible.
+4. Pin the Tomomomento icon from the puzzle-piece menu so the badge is visible.
 
 After a rebuild, click the reload arrow on the extension's card. The popup
 picks up changes the next time you open it, but the background worker only
@@ -116,7 +116,7 @@ One-time setup:
    (orange cloud), set Cloudflare's **SSL/TLS** mode to **Full**, not
    **Full (strict)**.
 
-To try the production server locally: `docker build -t tomatick-web . && docker run -p 8080:8080 tomatick-web`,
+To try the production server locally: `docker build -t tomomomento-web . && docker run -p 8080:8080 tomomomento-web`,
 then open http://localhost:8080.
 
 ### Deploying to GitHub Pages

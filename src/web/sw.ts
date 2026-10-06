@@ -7,7 +7,7 @@ export {};
 declare const self: ServiceWorkerGlobalScope;
 declare const APP_VERSION: string;
 
-const CACHE = `tomatick-${APP_VERSION}`;
+const CACHE = `tomomomento-${APP_VERSION}`;
 const APP_SHELL = [
   './',
   'index.html',

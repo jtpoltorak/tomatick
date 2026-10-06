@@ -22,15 +22,15 @@ describe('WebTimerHost', () => {
 
     const res = await host.send({ command: 'start' });
     expect(res.ok && res.state.status).toBe('running');
-    expect(document.title).toBe('25:00 Focus · Tomatick');
+    expect(document.title).toBe('25:00 Focus · Tomomomento');
 
     await vi.advanceTimersByTimeAsync(60_000);
-    expect(document.title).toBe('24:00 Focus · Tomatick');
+    expect(document.title).toBe('24:00 Focus · Tomomomento');
 
     await vi.advanceTimersByTimeAsync(24 * 60_000 + 100);
     const { state } = await host.load();
     expect(state).toMatchObject({ phase: 'shortBreak', status: 'idle', completedToday: 1 });
-    expect(document.title).toBe('✓ Time for your short break · Tomatick');
+    expect(document.title).toBe('✓ Time for your short break · Tomomomento');
     expect(changes).toHaveBeenCalled();
   });
 
