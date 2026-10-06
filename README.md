@@ -34,7 +34,7 @@ Tomomomento is a portfolio project, designed and built by Jon Poltorak working w
 [Claude Code](https://claude.com/claude-code), Anthropic's AI coding assistant.
 Claude wrote most of the code, tests, and docs from plain-language requests,
 and each change landed as a reviewed pull request; the
-[pull request history](https://github.com/jtpoltorak/tomatick/pulls?q=is%3Apr+is%3Aclosed)
+[pull request history](https://github.com/jtpoltorak/tomomomento/pulls?q=is%3Apr+is%3Aclosed)
 shows how it came together.
 
 It's free, open source ([MIT](LICENSE)), and will stay that way. It's meant
@@ -105,7 +105,7 @@ Cloudflare domain. The repo carries everything Railway needs:
 One-time setup:
 
 1. In Railway, create a new project → **Deploy from GitHub repo** →
-   `tomatick`. Railway reads `railway.json` and builds from `main` on every
+   `tomomomento`. Railway reads `railway.json` and builds from `main` on every
    push.
 2. In the service's **Settings → Networking**, click **Generate Domain** to
    check it on a `*.up.railway.app` address.
@@ -124,7 +124,7 @@ then open http://localhost:8080.
 [.github/workflows/pages.yml](.github/workflows/pages.yml) builds `dist-web/`
 and publishes it on every push to `main`. It needs a one-time switch: in the
 repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The
-app is then at `https://<user>.github.io/tomatick/`.
+app is then at `https://<user>.github.io/tomomomento/`.
 
 ## How it works
 

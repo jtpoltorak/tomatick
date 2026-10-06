@@ -3,7 +3,7 @@
 
 /*
  * The popup loads its fonts from the extension's root (/fonts/...). The web app
- * may be served from a subfolder (like GitHub Pages' /tomatick/), so point the
+ * may be served from a subfolder (like GitHub Pages' /tomomomento/), so point the
  * same faces at files the build bundles next to the app.
  */
 @font-face {
