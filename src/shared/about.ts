@@ -10,5 +10,5 @@ export const ABOUT = {
   copyrightYear: 2026,
   sourceUrl: 'https://github.com/jtpoltorak/tomatick',
   /** When the privacy policy or terms last changed in a way users should know about. */
-  legalUpdated: 'October 5, 2026',
+  legalUpdated: 'October 6, 2026',
 } as const;

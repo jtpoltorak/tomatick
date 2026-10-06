@@ -88,6 +88,37 @@ What's different on the web:
   alerts only fire while it's open.
 - **Notifications ask first.** Turning them on asks for the browser's permission.
 
+### Deploying to Railway
+
+The web app's real home is on [Railway](https://railway.com), behind a
+Cloudflare domain. The repo carries everything Railway needs:
+
+- [Dockerfile](Dockerfile) builds `dist-web/` with Node, then serves it with
+  [Caddy](https://caddyserver.com) on Railway's `$PORT`.
+- [Caddyfile](Caddyfile) adds compression, security headers (a strict
+  Content-Security-Policy, since the app makes no outside requests), and cache
+  rules: pages and scripts are rechecked on every visit so updates show up
+  right away, while icons and fonts are cached for a week.
+- [railway.json](railway.json) tells Railway to use the Dockerfile and to
+  redeploy only when files that affect the web app change.
+
+One-time setup:
+
+1. In Railway, create a new project → **Deploy from GitHub repo** →
+   `tomatick`. Railway reads `railway.json` and builds from `main` on every
+   push.
+2. In the service's **Settings → Networking**, click **Generate Domain** to
+   check it on a `*.up.railway.app` address.
+3. Still in **Networking**, click **Custom Domain** and enter your domain.
+   Railway shows a `CNAME` and a `TXT` record; add both in Cloudflare's
+   **DNS** tab (Cloudflare flattens the `CNAME` at the root domain, so the
+   bare domain works). Either proxy setting works; if the record is proxied
+   (orange cloud), set Cloudflare's **SSL/TLS** mode to **Full**, not
+   **Full (strict)**.
+
+To try the production server locally: `docker build -t tomatick-web . && docker run -p 8080:8080 tomatick-web`,
+then open http://localhost:8080.
+
 ### Deploying to GitHub Pages
 
 [.github/workflows/pages.yml](.github/workflows/pages.yml) builds `dist-web/`

@@ -1,0 +1,29 @@
+# Serves the web app's static files from /srv. Railway sets $PORT and handles
+# HTTPS in front of this, so Caddy only speaks plain HTTP.
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+		Referrer-Policy no-referrer
+		X-Content-Type-Options nosniff
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+		-Server
+	}
+
+	# File names don't change between releases (no hashes), so the browser
+	# checks for a newer copy each time. Icons and fonts rarely change.
+	@static path /icons/* /fonts/* /media/* *.woff2 *.png
+	@fresh not path /icons/* /fonts/* /media/* *.woff2 *.png
+	header @static Cache-Control "public, max-age=604800"
+	header @fresh Cache-Control "no-cache"
+
+	file_server
+}

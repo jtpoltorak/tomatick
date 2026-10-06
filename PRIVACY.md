@@ -1,6 +1,6 @@
 # Privacy policy: Tomatick (Focus Timer)
 
-_Last updated October 5, 2026_
+_Last updated October 6, 2026_
 
 **Tomatick doesn't collect, transmit, sell, or share any personal data.**
 There's no account, no analytics, no ads, and no tracking.
@@ -23,9 +23,13 @@ There's no account, no analytics, no ads, and no tracking.
 
 Tomatick also runs as a web app. There, your settings and the timer's
 progress are saved in your browser's storage for that site and never leave
-your device. The web app is hosted on GitHub Pages; like any web host, GitHub
-records visitors' IP addresses for security when the page loads (see
-[GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)).
+your device. The web app is hosted on Railway and served through Cloudflare
+(and, at its older github.io address, by GitHub Pages). Like any web host,
+they see visitors' IP addresses when the page loads and may log them for
+security (see the privacy policies of
+[Railway](https://railway.com/legal/privacy),
+[Cloudflare](https://www.cloudflare.com/privacypolicy/), and
+[GitHub](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)).
 Tomatick adds no cookies, analytics, or tracking, and makes no other network
 requests. It has no site blocker.
 
