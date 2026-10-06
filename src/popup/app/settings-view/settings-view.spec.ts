@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { createFakeStore, provideFakeStore } from '../testing';
+import { PLATFORM, type PlatformKind } from '../timer-host';
 import { SettingsView } from './settings-view';
 
 describe('SettingsView', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  async function setup() {
+  async function setup(platform: PlatformKind = 'extension') {
     const store = createFakeStore();
     TestBed.configureTestingModule({
       imports: [SettingsView],
-      providers: [provideFakeStore(store)],
+      providers: [provideFakeStore(store), { provide: PLATFORM, useValue: platform }],
     });
     const fixture = TestBed.createComponent(SettingsView);
     fixture.detectChanges();
@@ -100,5 +101,34 @@ describe('SettingsView', () => {
       await vi.advanceTimersByTimeAsync(400);
       expect(store.settings().blockedSites).not.toContain('news.com');
     });
+  });
+
+  describe('notifications', () => {
+    const notifySwitch = (el: HTMLElement) =>
+      el.querySelector<HTMLInputElement>('input[formcontrolname=notificationsEnabled]')!;
+
+    it('turn on when the browser allows them', async () => {
+      const { store, el } = await setup('web');
+      notifySwitch(el).click();
+      await vi.advanceTimersByTimeAsync(400);
+      expect(store.settings().notificationsEnabled).toBe(true);
+    });
+
+    it('switch back off and explain when the browser blocks them', async () => {
+      const { store, el, fixture } = await setup('web');
+      store.grantNotificationAccess = false;
+      notifySwitch(el).click();
+      await vi.advanceTimersByTimeAsync(400);
+      fixture.detectChanges();
+      expect(notifySwitch(el).checked).toBe(false);
+      expect(store.settings().notificationsEnabled).toBe(false);
+      expect(el.querySelector('.error')?.textContent).toContain('blocked notifications');
+    });
+  });
+
+  it('explains that the web app has no site blocker', async () => {
+    const { el } = await setup('web');
+    expect(el.querySelector('input[role=switch]:not([formcontrolname])')).toBeNull();
+    expect(el.textContent).toContain('needs the Tomatick Chrome extension');
   });
 });

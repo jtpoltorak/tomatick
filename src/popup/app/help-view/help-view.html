@@ -10,18 +10,36 @@
 <section>
   <h2>Tips</h2>
   <ul class="tips">
-    <li>
-      The timer keeps running when the popup is closed. The toolbar badge shows the minutes left.
-    </li>
-    <li>
-      Press <kbd>Space</kbd> to start or pause, and <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> to
-      open Tomatick.
-    </li>
+    @if (isWeb) {
+      <li>
+        The timer keeps running in the background while this page is open. The tab's title shows the
+        time left.
+      </li>
+      <li>Press <kbd>Space</kbd> to start or pause.</li>
+      <li>
+        To keep Tomatick in its own window, install it from your browser's menu (look for
+        <strong>Install</strong> or <strong>Add to Home Screen</strong>).
+      </li>
+    } @else {
+      <li>
+        The timer keeps running when the popup is closed. The toolbar badge shows the minutes left.
+      </li>
+      <li>
+        Press <kbd>Space</kbd> to start or pause, and <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+        to open Tomatick.
+      </li>
+    }
     <li>
       Click <strong>Focus</strong>, <strong>Short break</strong>, or <strong>Long break</strong> to
       jump to that timer.
     </li>
-    <li>Sounds, notifications, and the site blocker are off until you turn them on in Settings.</li>
+    <li>
+      @if (isWeb) {
+        Sounds and notifications are off until you turn them on in Settings.
+      } @else {
+        Sounds, notifications, and the site blocker are off until you turn them on in Settings.
+      }
+    </li>
   </ul>
 </section>
 

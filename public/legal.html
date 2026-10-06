@@ -36,7 +36,24 @@
           There's no account, no analytics, no ads, and no tracking.
         </p>
         <h3>What stays on your computer</h3>
-        <ul>
+        <ul data-only="web" hidden>
+          <li>
+            In the web app, your settings and the timer's progress are saved in your browser's
+            storage for this site. They never leave your device.
+          </li>
+          <li>
+            The web app is hosted on GitHub Pages. Like any web host, GitHub records visitors' IP
+            addresses for security when the page loads; see
+            <a
+              href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement"
+              target="_blank"
+              rel="noopener"
+              >GitHub's privacy statement</a
+            >. Tomatick adds no cookies, analytics, or tracking, and makes no other network requests.
+          </li>
+          <li>Alert sounds are generated on your device.</li>
+        </ul>
+        <ul data-only="extension">
           <li>
             Your settings and the timer's progress are saved with Chrome's built-in storage so the
             timer keeps going when the popup closes. If Chrome Sync is on, Google syncs your
@@ -54,7 +71,10 @@
           </li>
         </ul>
         <h3>Deleting your data</h3>
-        <p>Uninstalling Tomatick deletes everything it stored.</p>
+        <p data-only="extension">Uninstalling Tomatick deletes everything it stored.</p>
+        <p data-only="web" hidden>
+          Clearing this site's data in your browser's settings deletes everything the web app stored.
+        </p>
         <h3>Email</h3>
         <p>
           If you email me, I'll use your address and message only to reply to you, and I won't share

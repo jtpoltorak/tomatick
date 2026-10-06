@@ -1,7 +1,5 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal } from '@angular/core';
-import { BLOCKER_PERMISSIONS } from '../../shared/blocker';
-import { sendCommand, type Command } from '../../shared/messages';
-import { loadSettings, loadState, saveSettings } from '../../shared/storage';
+import type { Command } from '../../shared/messages';
 import {
   DEFAULT_SETTINGS,
   initialState,
@@ -10,16 +8,17 @@ import {
   type Settings,
   type TimerState,
 } from '../../shared/timer';
-
-const HINT_KEY = 'alertHintDismissed';
+import { TIMER_HOST } from './timer-host';
 
 /**
- * The popup's view of the timer. The background worker owns the real state;
- * this store mirrors it from chrome.storage into signals and forwards the
- * user's commands back to the worker.
+ * The UI's view of the timer. The host (the background worker in the
+ * extension, an in-page engine on the web) owns the real state; this store
+ * mirrors it into signals and forwards the user's commands back to the host.
  */
 @Injectable({ providedIn: 'root' })
 export class PomodoroStore {
+  private readonly host = inject(TIMER_HOST);
+
   readonly state = signal<TimerState>(initialState(DEFAULT_SETTINGS, Date.now()));
   readonly settings = signal<Settings>(DEFAULT_SETTINGS);
   readonly loaded = signal(false);
@@ -44,9 +43,8 @@ export class PomodoroStore {
   constructor() {
     void this.refresh();
 
-    const onChanged = () => void this.refresh();
-    chrome.storage.onChanged.addListener(onChanged);
-    inject(DestroyRef).onDestroy(() => chrome.storage.onChanged.removeListener(onChanged));
+    const unsubscribe = this.host.onChange(() => void this.refresh());
+    inject(DestroyRef).onDestroy(unsubscribe);
 
     effect((onCleanup) => {
       if (this.state().status !== 'running') return;
@@ -57,22 +55,17 @@ export class PomodoroStore {
   }
 
   async refresh(): Promise<void> {
-    const [state, settings, ui, access] = await Promise.all([
-      loadState(),
-      loadSettings(),
-      chrome.storage.local.get(HINT_KEY),
-      chrome.permissions.contains(BLOCKER_PERMISSIONS),
-    ]);
-    this.blockerAccess.set(access);
+    const { state, settings, alertHintDismissed, blockerAccess } = await this.host.load();
+    this.blockerAccess.set(blockerAccess);
     this.state.set(state);
     this.settings.set(settings);
-    this.alertHintDismissed.set(Boolean(ui[HINT_KEY]));
+    this.alertHintDismissed.set(alertHintDismissed);
     this.now.set(Date.now());
     this.loaded.set(true);
   }
 
   async send(command: Command): Promise<void> {
-    const res = await sendCommand(command);
+    const res = await this.host.send(command);
     if (res.ok) {
       this.now.set(Date.now());
       this.state.set(res.state);
@@ -83,18 +76,23 @@ export class PomodoroStore {
 
   async updateSettings(settings: Settings): Promise<void> {
     this.settings.set(settings);
-    await saveSettings(settings);
+    await this.host.saveSettings(settings);
   }
 
   /** Must be called straight from a click, since Chrome only prompts on a user gesture. */
   async requestBlockerAccess(): Promise<boolean> {
-    const granted = await chrome.permissions.request(BLOCKER_PERMISSIONS);
+    const granted = await this.host.requestBlockerAccess();
     this.blockerAccess.set(granted);
     return granted;
   }
 
+  /** Must be called straight from a click, since browsers only prompt on a user gesture. */
+  requestNotificationAccess(): Promise<boolean> {
+    return this.host.requestNotificationAccess();
+  }
+
   async dismissAlertHint(): Promise<void> {
     this.alertHintDismissed.set(true);
-    await chrome.storage.local.set({ [HINT_KEY]: true });
+    await this.host.dismissAlertHint();
   }
 }

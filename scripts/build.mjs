@@ -4,6 +4,7 @@
 //      the site blocker's "stay focused" page, and the legal page.
 //   3. The manifest version is synced from package.json.
 // Flags: --watch rebuilds on change; --zip also writes a Web Store upload zip.
+// --web builds the web app (PWA) into dist-web/ instead; see buildWeb() below.
 import * as esbuild from 'esbuild';
 import { spawn } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
@@ -13,6 +14,7 @@ import { deflateRawSync } from 'node:zlib';
 
 const watch = process.argv.includes('--watch');
 const zip = process.argv.includes('--zip');
+const web = process.argv.includes('--web');
 const ng = (args) =>
   spawn('npx', ['ng', 'build', ...args], { stdio: 'inherit', shell: process.platform === 'win32' });
 
@@ -40,6 +42,11 @@ async function syncManifestVersion() {
   return pkg.version;
 }
 
+if (web) {
+  await buildWeb();
+  process.exit(0);
+}
+
 await rm('dist', { recursive: true, force: true });
 
 if (watch) {
@@ -56,6 +63,34 @@ if (watch) {
     await warnAboutPlaceholders();
     await writeZip('dist', `tomatick-${version}.zip`);
   }
+}
+
+/**
+ * The web app: the same Angular UI with an in-page timer engine, plus the
+ * legal page and a service worker so it can be installed and work offline.
+ * The output is a static site, ready for GitHub Pages or any static host.
+ */
+async function buildWeb() {
+  await rm('dist-web', { recursive: true, force: true });
+  const code = await new Promise((resolve) =>
+    ng(['--configuration', 'production,web']).on('exit', resolve),
+  );
+  if (code !== 0) process.exit(code ?? 1);
+  const { version } = JSON.parse(await readFile('package.json', 'utf8'));
+  const shared = {
+    outdir: 'dist-web',
+    bundle: true,
+    target: 'es2022',
+    minify: true,
+    logLevel: 'info',
+  };
+  await esbuild.build({ ...shared, entryPoints: { legal: 'src/legal/legal.ts' }, format: 'esm' });
+  await esbuild.build({
+    ...shared,
+    entryPoints: { sw: 'src/web/sw.ts' },
+    format: 'iife',
+    define: { APP_VERSION: JSON.stringify(version) },
+  });
 }
 
 /** The Help screen and legal page shouldn't ship with "YOUR NAME" in them. */

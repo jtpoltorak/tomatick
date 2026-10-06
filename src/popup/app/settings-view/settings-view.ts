@@ -12,6 +12,7 @@ import {
   type SoundId,
 } from '../../../shared/timer';
 import { PomodoroStore } from '../pomodoro-store';
+import { PLATFORM } from '../timer-host';
 
 @Component({
   selector: 'app-settings-view',
@@ -22,6 +23,8 @@ import { PomodoroStore } from '../pomodoro-store';
 export class SettingsView {
   private readonly store = inject(PomodoroStore);
   private readonly fb = inject(FormBuilder).nonNullable;
+  /** A web page can't redirect other sites, so the web app explains that instead. */
+  protected readonly isWeb = inject(PLATFORM) === 'web';
   private audio?: AudioContext;
 
   protected readonly sounds = Object.entries(SOUND_LABELS) as [SoundId, string][];
@@ -32,6 +35,7 @@ export class SettingsView {
   protected readonly blockedSites = signal(this.store.settings().blockedSites);
   protected readonly blockerOn = computed(() => this.blockSites() && this.store.blockerAccess());
   protected readonly siteError = signal('');
+  protected readonly notificationError = signal('');
   private savedTimer: ReturnType<typeof setTimeout> | undefined;
 
   protected readonly durations = [
@@ -89,6 +93,17 @@ export class SettingsView {
     if (this.blockedSites().length === 0) this.blockedSites.set(SUGGESTED_SITES);
     this.blockSites.set(true);
     this.save();
+  }
+
+  /** The web app needs the browser's permission before it can show notifications. */
+  protected async toggleNotifications(event: Event): Promise<void> {
+    this.notificationError.set('');
+    if (!(event.target as HTMLInputElement).checked) return;
+    if (await this.store.requestNotificationAccess()) return;
+    this.form.controls.notificationsEnabled.setValue(false);
+    this.notificationError.set(
+      'Your browser blocked notifications for this site. Allow them in its site settings, then try again.',
+    );
   }
 
   protected addSite(input: HTMLInputElement): void {

@@ -64,6 +64,37 @@ After a rebuild, click the reload arrow on the extension's card. The popup
 picks up changes the next time you open it, but the background worker only
 updates on reload.
 
+## Web app
+
+The same timer also builds as a web app: an installable, offline-capable PWA
+with the same screens, settings, and sounds. It's a static site, so it can be
+hosted for free on GitHub Pages.
+
+```bash
+npm run start:web   # dev server at http://localhost:4200 (no service worker)
+npm run build:web   # builds the static site into dist-web/
+```
+
+To preview the production build, serve `dist-web/` with any static server,
+for example `npx serve dist-web`.
+
+What's different on the web:
+
+- **No site blocker.** A web page can't change what other tabs load, so the
+  Settings screen points to the extension instead.
+- **No toolbar badge or Alt+Shift+P.** The tab's title shows the time left instead.
+- **The page has to stay open** (in any tab, even a background one). Closing it
+  doesn't lose your place: the timer catches up when you open it again, but
+  alerts only fire while it's open.
+- **Notifications ask first.** Turning them on asks for the browser's permission.
+
+### Deploying to GitHub Pages
+
+[.github/workflows/pages.yml](.github/workflows/pages.yml) builds `dist-web/`
+and publishes it on every push to `main`. It needs a one-time switch: in the
+repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The
+app is then at `https://<user>.github.io/tomatick/`.
+
 ## How it works
 
 Think of the background service worker as a kitchen timer sitting on the
@@ -87,6 +118,13 @@ _when_ the timer ends and asks Chrome to wake it at that moment.
 | `scripts/build.mjs`            | Runs `ng build` for the popup, then esbuild for the worker and offscreen script.                                                                                                                                                                                 |
 
 Settings are saved to `chrome.storage.sync`, so they follow your Chrome profile.
+
+The web app reuses all of this except the Chrome-only parts. The popup's UI
+only talks to a `TimerHost` (`src/popup/app/timer-host.ts`): in the extension
+that's `ChromeTimerHost`, which messages the background worker; in the web app
+it's `WebTimerHost` (`src/web/web-timer-host.ts`), which runs the same timer
+logic in the page with `localStorage`, a `setTimeout` for the end time, the
+browser's Notification API, and the same synthesized sounds.
 
 ## Publishing to the Chrome Web Store
 

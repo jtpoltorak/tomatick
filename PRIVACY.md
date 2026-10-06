@@ -19,9 +19,20 @@ There's no account, no analytics, no ads, and no tracking.
   history anywhere. Chrome asks your permission when you turn it on, and
   Tomatick gives that permission back when you turn it off.
 
+## The web app
+
+Tomatick also runs as a web app. There, your settings and the timer's
+progress are saved in your browser's storage for that site and never leave
+your device. The web app is hosted on GitHub Pages; like any web host, GitHub
+records visitors' IP addresses for security when the page loads (see
+[GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)).
+Tomatick adds no cookies, analytics, or tracking, and makes no other network
+requests. It has no site blocker.
+
 ## Deleting your data
 
-Uninstalling Tomatick deletes everything it stored.
+Uninstalling Tomatick deletes everything it stored. For the web app, clear
+the site's data in your browser's settings.
 
 ## Email
 
