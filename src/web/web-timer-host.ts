@@ -25,6 +25,8 @@ import {
 } from '../shared/timer';
 import type { HostSnapshot, TimerHost } from '../popup/app/timer-host';
 
+// These keep the app's original name (Tomatick) so people who already use the
+// web app keep their settings, and old and new tabs share one timer.
 const KEYS = {
   settings: 'tomatick.settings',
   state: 'tomatick.state',
@@ -32,7 +34,7 @@ const KEYS = {
 };
 const LOCK_NAME = 'tomatick-timer';
 const NOTIFICATION_TAG = 'phase-complete';
-const APP_TITLE = 'Tomatick: Focus Timer';
+const APP_TITLE = 'Tomomomento: Focus Timer';
 
 function read<T>(key: string): T | undefined {
   try {
@@ -186,9 +188,9 @@ export class WebTimerHost implements TimerHost {
     if (state.status === 'running' || state.status === 'paused') {
       const clock = formatClock(remainingMs(state, Date.now()));
       const paused = state.status === 'paused' ? ' (paused)' : '';
-      document.title = `${clock} ${label}${paused} · Tomatick`;
+      document.title = `${clock} ${label}${paused} · Tomomomento`;
     } else if (this.justFinished) {
-      document.title = `✓ Time for your ${label.toLowerCase()} · Tomatick`;
+      document.title = `✓ Time for your ${label.toLowerCase()} · Tomomomento`;
     } else {
       document.title = APP_TITLE;
     }

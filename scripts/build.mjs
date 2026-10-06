@@ -61,7 +61,7 @@ if (watch) {
   const version = await syncManifestVersion();
   if (zip) {
     await warnAboutPlaceholders();
-    await writeZip('dist', `tomatick-${version}.zip`);
+    await writeZip('dist', `tomomomento-${version}.zip`);
   }
 }
 

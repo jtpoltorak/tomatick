@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Tomatick: Focus Timer",
-  "short_name": "Tomatick",
+  "name": "Tomomomento: Focus Timer",
+  "short_name": "Tomomomento",
   "version": "1.0.0",
   "description": "A simple, customizable focus timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "minimum_chrome_version": "120",
@@ -15,7 +15,7 @@
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Tomatick",
+    "default_title": "Tomomomento",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
@@ -37,7 +37,7 @@
       "suggested_key": {
         "default": "Alt+Shift+P"
       },
-      "description": "Open Tomatick"
+      "description": "Open Tomomomento"
     }
   },
   "web_accessible_resources": [

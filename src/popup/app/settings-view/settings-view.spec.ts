@@ -129,6 +129,6 @@ describe('SettingsView', () => {
   it('explains that the web app has no site blocker', async () => {
     const { el } = await setup('web');
     expect(el.querySelector('input[role=switch]:not([formcontrolname])')).toBeNull();
-    expect(el.textContent).toContain('needs the Tomatick Chrome extension');
+    expect(el.textContent).toContain('needs the Tomomomento Chrome extension');
   });
 });

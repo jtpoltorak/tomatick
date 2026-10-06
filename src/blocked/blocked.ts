@@ -34,7 +34,7 @@ function setMessage(before: string, after: string): void {
 
 function render(state: TimerState, blocking: boolean): void {
   clearInterval(tick);
-  document.title = `${site} is ${blocking ? 'blocked' : 'unblocked'} · Tomatick`;
+  document.title = `${site} is ${blocking ? 'blocked' : 'unblocked'} · Tomomomento`;
   if (blocking) {
     title.textContent = 'Stay focused';
     setMessage('', ' is blocked until your focus session ends.');

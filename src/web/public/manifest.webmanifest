@@ -1,6 +1,6 @@
 {
-  "name": "Tomatick: Focus Timer",
-  "short_name": "Tomatick",
+  "name": "Tomomomento: Focus Timer",
+  "short_name": "Tomomomento",
   "description": "A simple, free focus timer: focus sessions, short and long breaks, and optional sound and notification alerts.",
   "start_url": "./",
   "scope": "./",

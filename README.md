@@ -1,6 +1,6 @@
-# Tomatick
+# Tomomomento
 
-**Tomatick: Focus Timer** is a simple, customizable focus timer for Chrome, based on the
+**Tomomomento: Focus Timer** is a simple, customizable focus timer for Chrome, based on the
 Pomodoro Technique®. It defaults to the classic technique: 25-minute focus sessions, 5-minute short breaks, and a 15-minute
 long break after every 4 sessions. All of that is adjustable. Sound and
 notification alerts and a site blocker are available but off until you turn
@@ -30,7 +30,7 @@ them on.
 
 ## Built with Claude
 
-Tomatick is a portfolio project, designed and built by Jon Poltorak working with
+Tomomomento is a portfolio project, designed and built by Jon Poltorak working with
 [Claude Code](https://claude.com/claude-code), Anthropic's AI coding assistant.
 Claude wrote most of the code, tests, and docs from plain-language requests,
 and each change landed as a reviewed pull request; the
@@ -50,7 +50,7 @@ npm install
 npm run build     # builds the extension into dist/
 npm test          # unit and component tests (Vitest)
 npm run watch     # rebuilds on change
-npm run package   # builds and writes tomatick-<version>.zip for the Web Store
+npm run package   # builds and writes tomomomento-<version>.zip for the Web Store
 ```
 
 ### Load it in Chrome
@@ -58,7 +58,7 @@ npm run package   # builds and writes tomatick-<version>.zip for the Web Store
 1. Open `chrome://extensions`.
 2. Turn on **Developer mode** (top right).
 3. Click **Load unpacked** and choose the `dist/` folder.
-4. Pin the Tomatick icon from the puzzle-piece menu so the badge is visible.
+4. Pin the Tomomomento icon from the puzzle-piece menu so the badge is visible.
 
 After a rebuild, click the reload arrow on the extension's card. The popup
 picks up changes the next time you open it, but the background worker only
@@ -87,6 +87,37 @@ What's different on the web:
   doesn't lose your place: the timer catches up when you open it again, but
   alerts only fire while it's open.
 - **Notifications ask first.** Turning them on asks for the browser's permission.
+
+### Deploying to Railway
+
+The web app's real home is on [Railway](https://railway.com), behind a
+Cloudflare domain. The repo carries everything Railway needs:
+
+- [Dockerfile](Dockerfile) builds `dist-web/` with Node, then serves it with
+  [Caddy](https://caddyserver.com) on Railway's `$PORT`.
+- [Caddyfile](Caddyfile) adds compression, security headers (a strict
+  Content-Security-Policy, since the app makes no outside requests), and cache
+  rules: pages and scripts are rechecked on every visit so updates show up
+  right away, while icons and fonts are cached for a week.
+- [railway.json](railway.json) tells Railway to use the Dockerfile and to
+  redeploy only when files that affect the web app change.
+
+One-time setup:
+
+1. In Railway, create a new project → **Deploy from GitHub repo** →
+   `tomatick`. Railway reads `railway.json` and builds from `main` on every
+   push.
+2. In the service's **Settings → Networking**, click **Generate Domain** to
+   check it on a `*.up.railway.app` address.
+3. Still in **Networking**, click **Custom Domain** and enter your domain.
+   Railway shows a `CNAME` and a `TXT` record; add both in Cloudflare's
+   **DNS** tab (Cloudflare flattens the `CNAME` at the root domain, so the
+   bare domain works). Either proxy setting works; if the record is proxied
+   (orange cloud), set Cloudflare's **SSL/TLS** mode to **Full**, not
+   **Full (strict)**.
+
+To try the production server locally: `docker build -t tomomomento-web . && docker run -p 8080:8080 tomomomento-web`,
+then open http://localhost:8080.
 
 ### Deploying to GitHub Pages
 
@@ -138,5 +169,5 @@ collection, which keeps review straightforward.
 1. If your name or support email changes, update `src/shared/about.ts`, `PRIVACY.md`, and `TERMS.md` together.
 1. Bump `version` in `package.json` (the build copies it into the manifest).
 1. Run `npm run package` and upload the zip it writes.
-1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Add tomatick.support@gmail.com as the account's contact email (it's shown on the listing and can be changed later; the sign-in account can't). Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
+1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Add support@tomomomento.com as the account's contact email (it's shown on the listing and can be changed later; the sign-in account can't). Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
 1. Fill in the Store listing, Privacy practices, and Distribution tabs from [store/LISTING.md](store/LISTING.md), which has the description, category, permission justifications, privacy answers, and the screenshots and promo tiles in [store/images](store/images). Regenerate the images with `node scripts/store-images.mjs` after UI changes.

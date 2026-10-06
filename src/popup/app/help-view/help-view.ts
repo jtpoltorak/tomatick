@@ -12,5 +12,5 @@ export class HelpView {
   protected readonly about = ABOUT;
   protected readonly version = globalThis.chrome?.runtime?.getManifest?.().version ?? APP_VERSION;
   protected readonly isWeb = inject(PLATFORM) === 'web';
-  protected readonly mailto = `mailto:${ABOUT.email}?subject=${encodeURIComponent('Tomatick feedback')}`;
+  protected readonly mailto = `mailto:${ABOUT.email}?subject=${encodeURIComponent('Tomomomento feedback')}`;
 }
