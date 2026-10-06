@@ -23,12 +23,11 @@ There's no account, no analytics, no ads, and no tracking.
 
 Tomomomento also runs as a web app. There, your settings and the timer's
 progress are saved in your browser's storage for that site and never leave
-your device. The web app is hosted on Railway and served through Cloudflare
-(and, at its older github.io address, by GitHub Pages). Like any web host,
-they see visitors' IP addresses when the page loads and may log them for
-security (see the privacy policies of
-[Railway](https://railway.com/legal/privacy),
-[Cloudflare](https://www.cloudflare.com/privacypolicy/), and
+your device. The web app is hosted on Railway at tomomomento.com; its older
+github.io address, on GitHub Pages, only forwards visitors there. Like any web
+host, Railway and GitHub see visitors' IP addresses when the page loads and may
+log them for security (see the privacy policies of
+[Railway](https://railway.com/legal/privacy) and
 [GitHub](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)).
 Tomomomento adds no cookies, analytics, or tracking, and makes no other network
 requests. It has no site blocker.
@@ -40,7 +39,8 @@ the site's data in your browser's settings.
 
 ## Email
 
-If you email me, I'll use your address and message only to reply to you, and
+Email to support@tomomomento.com is forwarded to my inbox by Cloudflare (see
+[Cloudflare's privacy policy](https://www.cloudflare.com/privacypolicy/)). If you email me, I'll use your address and message only to reply to you, and
 I won't share them.
 
 ## Children
