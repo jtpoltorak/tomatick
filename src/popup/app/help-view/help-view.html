@@ -10,7 +10,12 @@
 <section>
   <h2>Tips</h2>
   <ul class="tips">
-    @if (isWeb) {
+    @if (isAndroid) {
+      <li>
+        The timer keeps running when you leave the app or lock your phone. Turn on notifications in
+        Settings to get an alert when time's up.
+      </li>
+    } @else if (isWeb) {
       <li>
         The timer keeps running in the background while this page is open. The tab's title shows the
         time left.
@@ -31,11 +36,11 @@
       </li>
     }
     <li>
-      Click <strong>Focus</strong>, <strong>Short break</strong>, or <strong>Long break</strong> to
-      jump to that timer.
+      {{ isAndroid ? 'Tap' : 'Click' }} <strong>Focus</strong>, <strong>Short break</strong>, or
+      <strong>Long break</strong> to jump to that timer.
     </li>
     <li>
-      @if (isWeb) {
+      @if (isWeb || isAndroid) {
         Sounds and notifications are off until you turn them on in Settings.
       } @else {
         Sounds, notifications, and the site blocker are off until you turn them on in Settings.

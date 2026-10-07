@@ -127,6 +127,42 @@ on every push to `main` and publishes [pages-redirect/](pages-redirect) there
 instead: a page that forwards visitors to the same page on tomomomento.com, and
 a service worker that clears the old offline copy from returning visitors.
 
+## Android app
+
+The web app also ships as an Android app, wrapped with [Capacitor](https://capacitorjs.com).
+It's the same Angular UI and timer engine (`src/android/` adds an
+`AndroidTimerHost`), plus the one thing a web page can't do on a phone: ring
+on time when the app is closed. Android freezes background apps, so whenever
+the timer is armed the app also hands Android a notification scheduled for the
+exact end time (and for any phases that will auto-start after it).
+
+You need [Android Studio](https://developer.android.com/studio) (it brings the
+Android SDK and a JDK).
+
+```bash
+npm run build:android   # builds dist-android/ and copies it into android/
+npm run open:android    # opens android/ in Android Studio
+```
+
+In Android Studio, press **Run** to install it on a phone (with USB debugging
+on) or an emulator. For the Play Store, use **Build > Generate Signed App
+Bundle**. Run `npm run build:android` again after any change to `src/`.
+
+What's different on Android:
+
+- **Alerts are native notifications.** Each alert sound has its own
+  notification channel (Android fixes a channel's sound once it exists), plus
+  a silent one. The sounds are WAV files rendered from the same notes as the
+  web app; the phone's notification volume sets their loudness.
+- **Exact alarms.** The app declares `USE_EXACT_ALARM`, which Android 13+ grants
+  to timer apps without asking. The Play Console asks apps that use it to
+  confirm they're a timer or alarm app.
+- **No site blocker**, same as the web app.
+
+The icons, splash screens and notification sounds in `android/app/src/main/res`
+come from `node scripts/android-assets.mjs` (see the script for setup); rerun it
+if the icon or sounds change.
+
 ## How it works
 
 Think of the background service worker as a kitchen timer sitting on the

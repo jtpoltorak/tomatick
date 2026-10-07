@@ -54,11 +54,11 @@ function write(key: string, value: unknown): void {
   }
 }
 
-function loadSettings(): Settings {
+export function loadSettings(): Settings {
   return sanitizeSettings({ ...DEFAULT_SETTINGS, ...read<Partial<Settings>>(KEYS.settings) });
 }
 
-function loadState(): TimerState {
+export function loadState(): TimerState {
   return read<TimerState>(KEYS.state) ?? initialState(loadSettings(), Date.now());
 }
 
@@ -69,6 +69,20 @@ function loadState(): TimerState {
 function withLock<T>(task: () => T): Promise<T> {
   if (!navigator.locks) return Promise.resolve().then(task);
   return navigator.locks.request(LOCK_NAME, async () => task());
+}
+
+/** The "time's up" notification text for a finished phase. */
+export function completionMessage(
+  finished: Phase,
+  next: TimerState,
+): { title: string; body: string } {
+  return {
+    title: finished === 'work' ? 'Focus session complete' : 'Break is over',
+    body:
+      next.status === 'running'
+        ? `${PHASE_LABELS[next.phase]} started.`
+        : `Ready for your ${PHASE_LABELS[next.phase].toLowerCase()}.`,
+  };
 }
 
 export class WebTimerHost implements TimerHost {
@@ -181,7 +195,11 @@ export class WebTimerHost implements TimerHost {
       this.titleTimer = setInterval(() => this.updateTitle(state), 1000);
     }
     this.updateTitle(state);
+    this.onScheduled(state);
   }
+
+  /** Called whenever the timer is (re)armed. The Android app hooks in here. */
+  protected onScheduled(_state: TimerState): void {}
 
   private updateTitle(state: TimerState): void {
     const label = PHASE_LABELS[state.phase];
@@ -197,21 +215,26 @@ export class WebTimerHost implements TimerHost {
   }
 
   /** Finishes the current phase if its end time has passed. */
-  private completeIfDue(alert: boolean): Promise<void> {
+  protected completeIfDue(alert: boolean): Promise<void> {
     return withLock(() => {
       const state = loadState();
       if (state.status !== 'running' || state.endTime === null || state.endTime > Date.now()) {
         return;
       }
       const settings = loadSettings();
-      const next = advance(state, settings, Date.now(), true);
+      const next = this.catchUp(state, settings, Date.now());
       this.justFinished = next.status === 'idle';
       this.commit(next);
       if (alert) void this.alertPhaseComplete(state.phase, next, settings);
     });
   }
 
-  private async alertPhaseComplete(
+  /** The state after a phase that ended at or before `now`. */
+  protected catchUp(state: TimerState, settings: Settings, now: number): TimerState {
+    return advance(state, settings, now, true);
+  }
+
+  protected async alertPhaseComplete(
     finished: Phase,
     next: TimerState,
     settings: Settings,
@@ -236,12 +259,9 @@ export class WebTimerHost implements TimerHost {
 
   private async showNotification(finished: Phase, next: TimerState): Promise<void> {
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
-    const title = finished === 'work' ? 'Focus session complete' : 'Break is over';
+    const { title, body } = completionMessage(finished, next);
     const options: NotificationOptions = {
-      body:
-        next.status === 'running'
-          ? `${PHASE_LABELS[next.phase]} started.`
-          : `Ready for your ${PHASE_LABELS[next.phase].toLowerCase()}.`,
+      body,
       icon: 'icons/icon-192.png',
       tag: NOTIFICATION_TAG,
       requireInteraction: next.status !== 'running',

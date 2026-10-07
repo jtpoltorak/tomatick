@@ -1,10 +1,11 @@
 // Alert sounds are synthesized with the Web Audio API, so the extension ships
 // no audio files. Used by the offscreen document (alerts while the popup is
-// closed) and by the settings screen (preview).
+// closed) and by the settings screen (preview). The Android app's notification
+// sounds are rendered from these same notes by scripts/android-assets.mjs.
 
 import type { SoundId } from './timer';
 
-interface Note {
+export interface Note {
   freq: number;
   /** Seconds after the sound starts. */
   at: number;
@@ -12,7 +13,7 @@ interface Note {
   type: OscillatorType;
 }
 
-const SOUNDS: Record<SoundId, Note[]> = {
+export const SOUNDS: Record<SoundId, Note[]> = {
   // A soft bell: a fundamental plus a quieter overtone, with a long decay.
   bell: [
     { freq: 880, at: 0, duration: 1.6, type: 'sine' },
@@ -34,12 +35,16 @@ const SOUNDS: Record<SoundId, Note[]> = {
   })),
 };
 
+/** Gain at full volume. Square waves are much louder than sines at the same gain. */
+export function peakLevel(sound: SoundId): number {
+  return sound === 'digital' ? 0.12 : 0.35;
+}
+
 /** Plays a sound and resolves when it has finished. */
 export function playSound(ctx: AudioContext, sound: SoundId, volume: number): Promise<void> {
   const notes = SOUNDS[sound];
   const start = ctx.currentTime + 0.05;
-  // Square waves are much louder than sines at the same gain.
-  const level = Math.max(0, Math.min(1, volume)) * (sound === 'digital' ? 0.12 : 0.35);
+  const level = Math.max(0, Math.min(1, volume)) * peakLevel(sound);
 
   for (const note of notes) {
     const osc = ctx.createOscillator();

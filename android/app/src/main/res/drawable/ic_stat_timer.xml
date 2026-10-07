@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status bar icon: the stopwatch from assets/icon.svg as a white silhouette
+     (Android tints it), with the face cut out so it reads at 24dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="128"
+    android:viewportHeight="128">
+    <!-- Crown and stem -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M56,10h16a4,4 0,0 1,4 4v4a4,4 0,0 1,-4 4h-3v10h-10v-10h-3a4,4 0,0 1,-4 -4v-4a4,4 0,0 1,4 -4z" />
+    <!-- Side button -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M101.1,26.8L108.2,33.9L96.9,45.2L89.8,38.1Z" />
+    <!-- Body ring with the time-remaining wedge (even-odd cuts out the face) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M64,26a46,46 0,1 1,0 92a46,46 0,1 1,0 -92zM64,40a32,32 0,1 0,0 64a32,32 0,1 0,0 -64z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M64,72V46A26,26 0,0 1,86.52 85Z" />
+</vector>

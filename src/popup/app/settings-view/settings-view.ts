@@ -24,7 +24,10 @@ export class SettingsView {
   private readonly store = inject(PomodoroStore);
   private readonly fb = inject(FormBuilder).nonNullable;
   /** A web page can't redirect other sites, so the web app explains that instead. */
-  protected readonly isWeb = inject(PLATFORM) === 'web';
+  private readonly platform = inject(PLATFORM);
+  /** The web and Android apps can't block sites; only the extension can. */
+  protected readonly isWeb = this.platform !== 'extension';
+  protected readonly isAndroid = this.platform === 'android';
   private audio?: AudioContext;
 
   protected readonly sounds = Object.entries(SOUND_LABELS) as [SoundId, string][];

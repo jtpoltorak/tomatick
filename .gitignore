@@ -46,3 +46,6 @@ Thumbs.db
 
 # Packaged extension
 *.zip
+
+# Android app web build (copied into android/ by Capacitor)
+/dist-android

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Tomomomento</string>
+    <string name="title_activity_main">Tomomomento</string>
+    <string name="package_name">com.tomomomento.app</string>
+    <string name="custom_url_scheme">com.tomomomento.app</string>
+</resources>
