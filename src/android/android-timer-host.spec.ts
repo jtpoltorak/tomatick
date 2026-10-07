@@ -3,6 +3,8 @@ import { DEFAULT_SETTINGS, initialState, type Settings, type TimerState } from '
 const native = vi.hoisted(() => ({
   scheduled: [] as { id: number; schedule?: { at?: Date }; channelId?: string; title: string }[],
   permission: 'granted',
+  /** The latest host's App 'resume' listener. */
+  resume: undefined as (() => void) | undefined,
 }));
 
 vi.mock('@capacitor/local-notifications', () => ({
@@ -19,7 +21,14 @@ vi.mock('@capacitor/local-notifications', () => ({
     }),
   },
 }));
-vi.mock('@capacitor/app', () => ({ App: { addListener: vi.fn(async () => ({})) } }));
+vi.mock('@capacitor/app', () => ({
+  App: {
+    addListener: vi.fn(async (_event: string, listener: () => void) => {
+      native.resume = listener;
+      return {};
+    }),
+  },
+}));
 
 const { AndroidTimerHost, upcomingAlerts } = await import('./android-timer-host');
 
@@ -112,7 +121,9 @@ describe('AndroidTimerHost', () => {
     await host.send({ command: 'start' });
     // Focus 25 + break 5 + focus 25 = 55 minutes, so 2 minutes into the next break.
     vi.setSystemTime(Date.now() + 57 * 60_000);
-    document.dispatchEvent(new Event('visibilitychange'));
+    // Through this host's own listener: a page-wide visibilitychange would also
+    // reach hosts left over from other spec files, which share this document.
+    native.resume!();
     await settle();
     const { state } = await host.load();
     expect(state).toMatchObject({ phase: 'shortBreak', status: 'running', completedToday: 2 });
