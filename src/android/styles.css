@@ -1,0 +1,14 @@
+/* The web app's styles, stretched to fill a phone screen instead of a 320px card. */
+@import '../web/styles.css';
+
+body {
+  width: auto;
+  max-width: 480px;
+  /* Keep clear of the status bar, notch, and gesture bar (Android 15+ draws edge to edge). */
+  padding: max(16px, env(safe-area-inset-top)) env(safe-area-inset-right)
+    max(16px, env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  -webkit-tap-highlight-color: transparent;
+}
+app-root {
+  border: 0;
+}

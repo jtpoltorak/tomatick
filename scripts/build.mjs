@@ -5,6 +5,8 @@
 //   3. The manifest version is synced from package.json.
 // Flags: --watch rebuilds on change; --zip also writes a Web Store upload zip.
 // --web builds the web app (PWA) into dist-web/ instead; see buildWeb() below.
+// --android builds the Android app's web files into dist-android/ and copies
+// them into the Capacitor project in android/; see buildAndroid() below.
 import * as esbuild from 'esbuild';
 import { spawn } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
@@ -15,6 +17,7 @@ import { deflateRawSync } from 'node:zlib';
 const watch = process.argv.includes('--watch');
 const zip = process.argv.includes('--zip');
 const web = process.argv.includes('--web');
+const android = process.argv.includes('--android');
 const ng = (args) =>
   spawn('npx', ['ng', 'build', ...args], { stdio: 'inherit', shell: process.platform === 'win32' });
 
@@ -44,6 +47,10 @@ async function syncManifestVersion() {
 
 if (web) {
   await buildWeb();
+  process.exit(0);
+}
+if (android) {
+  await buildAndroid();
   process.exit(0);
 }
 
@@ -91,6 +98,34 @@ async function buildWeb() {
     format: 'iife',
     define: { APP_VERSION: JSON.stringify(version) },
   });
+}
+
+/**
+ * The Android app: the web app's UI and engine with native notifications, run
+ * by Capacitor. No service worker, since the files ship inside the app.
+ */
+async function buildAndroid() {
+  await rm('dist-android', { recursive: true, force: true });
+  const code = await new Promise((resolve) =>
+    ng(['--configuration', 'production,android']).on('exit', resolve),
+  );
+  if (code !== 0) process.exit(code ?? 1);
+  await esbuild.build({
+    entryPoints: { legal: 'src/legal/legal.ts' },
+    outdir: 'dist-android',
+    bundle: true,
+    format: 'esm',
+    target: 'es2022',
+    minify: true,
+    logLevel: 'info',
+  });
+  const sync = await new Promise((resolve) =>
+    spawn('npx', ['cap', 'sync', 'android'], {
+      stdio: 'inherit',
+      shell: process.platform === 'win32',
+    }).on('exit', resolve),
+  );
+  if (sync !== 0) process.exit(sync ?? 1);
 }
 
 /** The Help screen and legal page shouldn't ship with "YOUR NAME" in them. */

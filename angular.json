@@ -80,6 +80,26 @@
                 "base": "dist-web",
                 "browser": ""
               }
+            },
+            "android": {
+              "browser": "src/android/main.ts",
+              "index": "src/android/index.html",
+              "styles": ["src/android/styles.css"],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public",
+                  "ignore": ["manifest.json", "options.html", "offscreen.html", "blocked.*"]
+                },
+                {
+                  "glob": "icons/*",
+                  "input": "src/web/public"
+                }
+              ],
+              "outputPath": {
+                "base": "dist-android",
+                "browser": ""
+              }
             }
           },
           "defaultConfiguration": "production"

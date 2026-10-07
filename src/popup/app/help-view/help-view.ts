@@ -11,6 +11,8 @@ import { PLATFORM } from '../timer-host';
 export class HelpView {
   protected readonly about = ABOUT;
   protected readonly version = globalThis.chrome?.runtime?.getManifest?.().version ?? APP_VERSION;
-  protected readonly isWeb = inject(PLATFORM) === 'web';
+  private readonly platform = inject(PLATFORM);
+  protected readonly isWeb = this.platform === 'web';
+  protected readonly isAndroid = this.platform === 'android';
   protected readonly mailto = `mailto:${ABOUT.email}?subject=${encodeURIComponent('Tomomomento feedback')}`;
 }

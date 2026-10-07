@@ -3,7 +3,7 @@ import type { Command, CommandResponse } from '../../shared/messages';
 import type { Settings, TimerState } from '../../shared/timer';
 
 /** Which build the UI is running in. A few labels and settings differ between them. */
-export type PlatformKind = 'extension' | 'web';
+export type PlatformKind = 'extension' | 'web' | 'android';
 
 export const PLATFORM = new InjectionToken<PlatformKind>('PLATFORM', {
   providedIn: 'root',

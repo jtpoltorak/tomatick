@@ -7,6 +7,8 @@
     "package": "node scripts/build.mjs --zip",
     "build:web": "node scripts/build.mjs --web",
     "start:web": "ng serve",
+    "build:android": "node scripts/build.mjs --android",
+    "open:android": "npx cap open android",
     "test": "ng test --watch=false",
     "test:watch": "ng test"
   },
@@ -19,6 +21,10 @@
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/local-notifications": "^8.3.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -26,6 +32,7 @@
     "@angular/build": "^22.2.1",
     "@angular/cli": "^22.2.1",
     "@angular/compiler-cli": "^22.2.0",
+    "@capacitor/cli": "^8.5.3",
     "@types/chrome": "^0.3.4",
     "esbuild": "^0.28.2",
     "jsdom": "^30.0.0",

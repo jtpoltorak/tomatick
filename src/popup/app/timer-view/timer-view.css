@@ -36,8 +36,12 @@
 
 .dial {
   position: relative;
-  width: 200px;
-  height: 200px;
+  /* 200px at the normal 15px text size. Sized in em so the ring grows with the
+     clock when the text is scaled up (Android's font size setting, browser
+     minimum font sizes), instead of the digits running into the ring. */
+  width: calc(200em / 15);
+  max-width: 100%;
+  aspect-ratio: 1;
   margin: 0 auto;
 }
 .ring {
