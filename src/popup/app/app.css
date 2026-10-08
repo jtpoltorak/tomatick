@@ -29,56 +29,20 @@
   height: 1.875rem;
 }
 
-/* Help and Settings sit together as one group. */
+/* Install (web only), Help, and Settings sit together as one group of icon buttons. */
 .actions {
   display: flex;
   gap: 0;
   margin-right: -0.5rem;
 }
 
-.install-btn {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  height: 2.625rem;
-  padding: 0 0.625rem;
-  border: 1px solid var(--control);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--fg);
-  font: inherit;
-  font-size: 1.1875rem;
-  cursor: pointer;
-}
-.install-btn:hover {
-  background: var(--surface);
-}
-.install-btn svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: currentColor;
-}
-
-/* Phones: tighter edges, and the Install button shrinks to its icon. */
+/* Phones: tighter edges and a smaller title. */
 @media (max-width: 27rem) {
   :host {
     padding-inline: 1rem;
   }
-  .topbar {
-    gap: 0.5rem;
-  }
   .topbar h1 {
     font-size: 1.3125rem;
-  }
-  .install-btn {
-    width: 3rem;
-    height: 3rem;
-    padding: 0;
-    justify-content: center;
-  }
-  .install-label {
-    display: none;
   }
 }
 @media (max-width: 24rem) {
