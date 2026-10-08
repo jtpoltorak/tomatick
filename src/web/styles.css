@@ -28,16 +28,17 @@
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Same 320px card as the popup, centered on the page. */
+/* Same card as the popup, centered on the page. Phones get the full width. */
 body {
-  padding: 24px 0;
+  max-width: 100%;
+  padding: 1.5rem 0;
 }
-@media (min-width: 480px) {
+@media (min-width: 34rem) {
   body {
-    padding-top: 48px;
+    padding-top: 3rem;
   }
   app-root {
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 1.5rem;
   }
 }

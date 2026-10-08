@@ -22,61 +22,95 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #ffffff;
   --fg: #1f2328;
-  --muted: #6e7781;
+  /* Secondary text: at least 4.5:1 on both --bg and --surface. */
+  --muted: #59636e;
   --track: #eaeef2;
   --surface: #f6f8fa;
+  /* Dividers between sections. Decorative, so they can be faint. */
   --border: #d0d7de;
-  --accent: #d9480f;
+  /* Edges of controls (inputs, switches, empty cycle dots): at least 3:1 on --bg. */
+  --control: #868e96;
+  --accent: #c2410c;
   --on-accent: #ffffff;
+  --error: #c92a2a;
 }
 
+/* Dark follows the system unless the user picked Light or Dark in Settings (<html data-theme>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
     --bg: #1c1f24;
     --fg: #e6edf3;
     --muted: #9198a1;
     --track: #30363d;
     --surface: #262b32;
     --border: #3d444d;
+    --control: #7d8590;
     --accent: #ff7a45;
     --on-accent: #1c1f24;
+    --error: #ff8787;
   }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #1c1f24;
+  --fg: #e6edf3;
+  --muted: #9198a1;
+  --track: #30363d;
+  --surface: #262b32;
+  --border: #3d444d;
+  --control: #7d8590;
+  --accent: #ff7a45;
+  --on-accent: #1c1f24;
+  --error: #ff8787;
 }
 
 /* The accent follows the current phase: orange for focus, green and blue for breaks. */
 :root[data-phase='shortBreak'] {
-  --accent: #2f9e44;
+  --accent: #2b7a3b;
 }
 :root[data-phase='longBreak'] {
   --accent: #1971c2;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-phase='shortBreak'] {
+  :root[data-phase='shortBreak']:not([data-theme='light']) {
     --accent: #51cf66;
   }
-  :root[data-phase='longBreak'] {
+  :root[data-phase='longBreak']:not([data-theme='light']) {
     --accent: #4dabf7;
   }
+}
+:root[data-phase='shortBreak'][data-theme='dark'] {
+  --accent: #51cf66;
+}
+:root[data-phase='longBreak'][data-theme='dark'] {
+  --accent: #4dabf7;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/*
+ * Sizes are in rem so they follow the browser's font size setting. The UI is
+ * drawn at 1.5x the size of the original 320px design for easier reading.
+ */
 html {
   background: var(--bg);
 }
 
 body {
   margin: 0 auto;
-  width: 320px;
+  width: 30rem;
+  /* Chrome caps extension popups at 800px wide. */
+  max-width: 800px;
   background: var(--bg);
   color: var(--fg);
   font:
-    15px/1.4 Rubik,
+    1.375rem/1.45 Rubik,
     system-ui,
     -apple-system,
     'Segoe UI',
@@ -89,18 +123,16 @@ button {
   color: inherit;
   cursor: pointer;
 }
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--accent);
+:focus-visible {
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
 .icon-btn {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 3.375rem;
+  height: 3.375rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -111,14 +143,17 @@ select:focus-visible {
   color: var(--fg);
 }
 .icon-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 1.75rem;
+  height: 1.75rem;
   fill: currentColor;
 }
 .icon-btn.ghost {
   background: transparent;
-  width: 32px;
-  height: 32px;
+  width: 3rem;
+  height: 3rem;
+}
+.icon-btn.ghost:hover {
+  background: var(--surface);
 }
 
 .visually-hidden {
@@ -128,4 +163,13 @@ select:focus-visible {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }

@@ -113,4 +113,10 @@ describe('timer state machine', () => {
     expect(sanitizeSettings({ volume: 4, sound: 'kazoo' as never }).volume).toBe(1);
     expect(sanitizeSettings({ sound: 'kazoo' as never }).sound).toBe('bell');
   });
+
+  it('sanitizeSettings keeps a valid theme and defaults to the system one', () => {
+    expect(sanitizeSettings({}).theme).toBe('system');
+    expect(sanitizeSettings({ theme: 'dark' }).theme).toBe('dark');
+    expect(sanitizeSettings({ theme: 'purple' as never }).theme).toBe('system');
+  });
 });

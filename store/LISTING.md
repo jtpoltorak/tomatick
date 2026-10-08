@@ -31,7 +31,8 @@ Features
 • Today's completed sessions, and dots showing how close the long break is
 • An optional site blocker that shows a "stay focused" page for the sites you choose, only during focus sessions
 • A built-in guide to the technique and how to use it
-• Light and dark themes that follow your system
+• Light and dark themes that follow your system, or pick one yourself
+• Large, easy-to-read text, with keyboard and screen reader support
 • Alt+Shift+P opens Tomomomento from anywhere in Chrome
 
 Private by design

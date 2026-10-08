@@ -6,6 +6,7 @@ import { sanitizeSites } from './blocker';
 export type Phase = 'work' | 'shortBreak' | 'longBreak';
 export type Status = 'idle' | 'running' | 'paused';
 export type SoundId = 'bell' | 'chime' | 'digital';
+export type ThemeId = 'system' | 'light' | 'dark';
 
 export interface Settings {
   workMinutes: number;
@@ -24,6 +25,8 @@ export interface Settings {
   blockSites: boolean;
   /** Bare domains, e.g. "youtube.com". Subdomains are blocked too. */
   blockedSites: string[];
+  /** 'system' follows the device's light or dark mode. */
+  theme: ThemeId;
 }
 
 export interface TimerState {
@@ -56,6 +59,13 @@ export const DEFAULT_SETTINGS: Settings = {
   // Off until the user turns it on and grants the site access it needs.
   blockSites: false,
   blockedSites: [],
+  theme: 'system',
+};
+
+export const THEME_LABELS: Record<ThemeId, string> = {
+  system: 'System',
+  light: 'Light',
+  dark: 'Dark',
 };
 
 export const SOUND_LABELS: Record<SoundId, string> = {
@@ -210,5 +220,6 @@ export function sanitizeSettings(input: Partial<Settings>): Settings {
     blockSites: input.blockSites ?? d.blockSites,
     blockedSites:
       input.blockedSites === undefined ? d.blockedSites : sanitizeSites(input.blockedSites),
+    theme: input.theme && input.theme in THEME_LABELS ? input.theme : d.theme,
   };
 }

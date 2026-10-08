@@ -11,9 +11,9 @@
   color-scheme: light dark;
   --bg: #ffffff;
   --fg: #1f2328;
-  --muted: #6e7781;
+  --muted: #59636e;
   --track: #eaeef2;
-  --accent: #d9480f;
+  --accent: #c2410c;
 }
 @media (prefers-color-scheme: dark) {
   :root {

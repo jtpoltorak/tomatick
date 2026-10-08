@@ -5,47 +5,63 @@
         <path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z" />
       </svg>
     </button>
-    <h1>{{ view() === 'settings' ? 'Settings' : 'Help' }}</h1>
+    <h1 tabindex="-1">{{ view() === 'settings' ? 'Settings' : 'Help' }}</h1>
   } @else {
-    <img src="icons/icon-32.png" width="20" height="20" alt="" />
+    <img src="icons/icon-32.png" class="logo" alt="" />
     <h1>Tomomomento</h1>
     @if (installPrompt && installPrompt.available()) {
-      <button class="install-btn" (click)="installPrompt.install()" title="Install as an app">
+      <button
+        class="install-btn"
+        (click)="installPrompt.install()"
+        aria-label="Install"
+        title="Install as an app"
+      >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M11 4h2v8.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4 3.3 3.3zM5 18h14v2H5z" />
         </svg>
-        Install
+        <span class="install-label">Install</span>
       </button>
     }
-    <button class="icon-btn ghost" (click)="show('help')" aria-label="Help" title="Help">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2zm2.1-7.7-.9.9c-.7.7-1.2 1.3-1.2 2.8h-2v-.5c0-1.1.4-2.1 1.2-2.8l1.2-1.3a2 2 0 1 0-3.4-1.4H8a4 4 0 1 1 8 0c0 .9-.4 1.7-.9 2.3z"
-        />
-      </svg>
-    </button>
-    <button
-      class="icon-btn ghost"
-      (click)="show('settings')"
-      aria-label="Settings"
-      title="Settings"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.3 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.3-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"
-          transform="translate(-1 0)"
-        />
-      </svg>
-    </button>
+    <div class="actions">
+      <button
+        class="icon-btn ghost"
+        data-view="help"
+        (click)="show('help')"
+        aria-label="Help"
+        title="Help"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2zm2.1-7.7-.9.9c-.7.7-1.2 1.3-1.2 2.8h-2v-.5c0-1.1.4-2.1 1.2-2.8l1.2-1.3a2 2 0 1 0-3.4-1.4H8a4 4 0 1 1 8 0c0 .9-.4 1.7-.9 2.3z"
+          />
+        </svg>
+      </button>
+      <button
+        class="icon-btn ghost"
+        data-view="settings"
+        (click)="show('settings')"
+        aria-label="Settings"
+        title="Settings"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.3 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.3-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"
+            transform="translate(-1 0)"
+          />
+        </svg>
+      </button>
+    </div>
   }
 </header>
 
-@if (store.loaded()) {
-  @if (view() === 'settings') {
-    <app-settings-view />
-  } @else if (view() === 'help') {
-    <app-help-view />
-  } @else {
-    <app-timer-view (openSettings)="show('settings')" />
+<main>
+  @if (store.loaded()) {
+    @if (view() === 'settings') {
+      <app-settings-view />
+    } @else if (view() === 'help') {
+      <app-help-view />
+    } @else {
+      <app-timer-view (openSettings)="show('settings')" />
+    }
   }
-}
+</main>

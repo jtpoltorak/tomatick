@@ -179,6 +179,21 @@
     }
   </section>
 
+  <section>
+    <fieldset class="theme">
+      <legend><h2>Appearance</h2></legend>
+      <div class="segmented">
+        @for (t of themes; track t[0]) {
+          <label>
+            <input type="radio" formControlName="theme" [value]="t[0]" />
+            <span>{{ t[1] }}</span>
+          </label>
+        }
+      </div>
+    </fieldset>
+    <p class="note">System matches your device's light or dark mode.</p>
+  </section>
+
   <footer>
     <button type="button" class="text-btn" (click)="restoreDefaults()">Restore defaults</button>
     <span class="saved" role="status">{{ saved() ? 'Saved' : '' }}</span>

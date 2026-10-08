@@ -61,6 +61,9 @@ function render(state: TimerState, blocking: boolean): void {
 
 async function refresh(): Promise<void> {
   const [state, settings] = await Promise.all([loadState(), loadSettings()]);
+  // Follow the Light / Dark / System choice from the popup's Settings.
+  if (settings.theme === 'system') delete document.documentElement.dataset['theme'];
+  else document.documentElement.dataset['theme'] = settings.theme;
   render(state, shouldBlock(state, settings));
 }
 

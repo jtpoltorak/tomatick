@@ -36,6 +36,21 @@ describe('SettingsView', () => {
     expect(store.settings().workMinutes).toBe(26);
   });
 
+  it('picks a theme, starting from the system one', async () => {
+    const { store, el, fixture } = await setup();
+    const radios = Array.from(el.querySelectorAll<HTMLInputElement>('.theme input[type=radio]'));
+    expect(radios.map((r) => r.parentElement?.textContent?.trim())).toEqual([
+      'System',
+      'Light',
+      'Dark',
+    ]);
+    expect(radios[0].checked).toBe(true);
+    radios[2].click();
+    vi.advanceTimersByTime(400);
+    await fixture.whenStable();
+    expect(store.settings().theme).toBe('dark');
+  });
+
   it('reveals sound options when sound is turned on', async () => {
     const { store, el, fixture } = await setup();
     const soundSwitch = el.querySelector<HTMLInputElement>('input[formcontrolname=soundEnabled]')!;

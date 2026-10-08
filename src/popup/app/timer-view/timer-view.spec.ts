@@ -21,6 +21,17 @@ describe('TimerView', () => {
     expect(button('Start')).toBeTruthy();
   });
 
+  it('shows time left as a progress bar below the clock', async () => {
+    const { el } = await setup({ remainingMs: 10 * 60_000 });
+    const bar = el.querySelector('[role="progressbar"]')!;
+    expect(bar.getAttribute('aria-label')).toBe('Time left');
+    expect(bar.getAttribute('aria-valuetext')).toBe('10 of 25 minutes left');
+    expect(el.querySelector('.clock')?.nextElementSibling).toBe(bar);
+    expect(el.querySelector('.cycle')?.getAttribute('aria-label')).toBe(
+      '0 of 4 focus sessions done before a long break',
+    );
+  });
+
   it('starts and pauses through the main button', async () => {
     const { store, fixture, button } = await setup();
     button('Start').click();
