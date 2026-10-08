@@ -8,8 +8,10 @@ import {
   DEFAULT_SETTINGS,
   sanitizeSettings,
   SOUND_LABELS,
+  THEME_LABELS,
   type Settings,
   type SoundId,
+  type ThemeId,
 } from '../../../shared/timer';
 import { PomodoroStore } from '../pomodoro-store';
 import { PLATFORM } from '../timer-host';
@@ -28,6 +30,7 @@ export class SettingsView {
   private audio?: AudioContext;
 
   protected readonly sounds = Object.entries(SOUND_LABELS) as [SoundId, string][];
+  protected readonly themes = Object.entries(THEME_LABELS) as [ThemeId, string][];
   protected readonly saved = signal(false);
 
   // The blocker lives outside the form because turning it on waits on Chrome's permission prompt.
@@ -55,6 +58,7 @@ export class SettingsView {
     soundEnabled: [false],
     sound: ['bell' as SoundId],
     volumePercent: [70],
+    theme: ['system' as ThemeId],
   });
 
   constructor() {

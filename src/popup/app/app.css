@@ -1,41 +1,88 @@
 :host {
   display: block;
-  padding: 12px 16px 16px;
+  padding: 1.125rem 1.5rem 1.5rem;
 }
 
 .topbar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 32px;
-  margin-bottom: 12px;
+  gap: 0.5rem;
+  height: 3rem;
+  margin-bottom: 1.125rem;
 }
 .topbar h1 {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0;
-  font-size: 16px;
+  font-size: 1.5rem;
   font-weight: 600;
+}
+.topbar h1:focus {
+  outline: none;
+}
+.logo {
+  flex: none;
+  width: 1.875rem;
+  height: 1.875rem;
+}
+
+/* Help and Settings sit together as one group. */
+.actions {
+  display: flex;
+  gap: 0;
+  margin-right: -0.5rem;
 }
 
 .install-btn {
+  flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 28px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  gap: 0.375rem;
+  height: 2.625rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--control);
+  border-radius: 999px;
   background: transparent;
   color: var(--fg);
   font: inherit;
-  font-size: 13px;
+  font-size: 1.1875rem;
   cursor: pointer;
 }
 .install-btn:hover {
   background: var(--surface);
 }
 .install-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 1.5rem;
+  height: 1.5rem;
   fill: currentColor;
+}
+
+/* Phones: tighter edges, and the Install button shrinks to its icon. */
+@media (max-width: 27rem) {
+  :host {
+    padding-inline: 1rem;
+  }
+  .topbar {
+    gap: 0.5rem;
+  }
+  .topbar h1 {
+    font-size: 1.3125rem;
+  }
+  .install-btn {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    justify-content: center;
+  }
+  .install-label {
+    display: none;
+  }
+}
+@media (max-width: 24rem) {
+  .logo {
+    display: none;
+  }
 }

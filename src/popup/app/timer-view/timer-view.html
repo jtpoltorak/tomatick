@@ -16,21 +16,19 @@
 </div>
 
 <section class="dial">
-  <svg viewBox="0 0 120 120" class="ring" aria-hidden="true">
-    <circle class="ring-track" cx="60" cy="60" [attr.r]="radius" />
-    <circle
-      class="ring-progress"
-      cx="60"
-      cy="60"
-      [attr.r]="radius"
-      [style.stroke-dasharray]="circumference"
-      [style.stroke-dashoffset]="dashOffset()"
-    />
-  </svg>
-  <div class="dial-text">
-    <div class="clock" role="timer" [attr.aria-label]="clock() + ' remaining'">{{ clock() }}</div>
-    <div class="status" aria-live="polite">{{ status() }}</div>
+  <div class="clock" role="timer" [attr.aria-label]="clock() + ' left'">{{ clock() }}</div>
+  <div
+    class="bar"
+    role="progressbar"
+    aria-label="Time left"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-valuenow]="percentLeft()"
+    [attr.aria-valuetext]="timeLeftText()"
+  >
+    <div class="bar-fill" [style.transform]="'scaleX(' + (1 - store.progress()) + ')'"></div>
   </div>
+  <div class="status" aria-live="polite">{{ status() }}</div>
 </section>
 
 <div class="controls">
@@ -56,15 +54,7 @@
 </div>
 
 <footer class="footer">
-  <div
-    class="cycle"
-    [title]="
-      store.state().completedInCycle +
-      ' of ' +
-      cycleDots().length +
-      ' focus sessions until a long break'
-    "
-  >
+  <div class="cycle" role="img" [attr.aria-label]="cycleText()" [title]="cycleText()">
     @for (done of cycleDots(); track $index) {
       <span class="dot" [class.done]="done"></span>
     }

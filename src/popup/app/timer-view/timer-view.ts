@@ -2,9 +2,6 @@ import { Component, computed, HostListener, inject, output } from '@angular/core
 import { formatClock, PHASE_LABELS, type Phase } from '../../../shared/timer';
 import { PomodoroStore } from '../pomodoro-store';
 
-const RADIUS = 54;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
 @Component({
   selector: 'app-timer-view',
   templateUrl: './timer-view.html',
@@ -20,11 +17,15 @@ export class TimerView {
     { id: 'longBreak', label: PHASE_LABELS.longBreak },
   ];
 
-  protected readonly radius = RADIUS;
-  protected readonly circumference = CIRCUMFERENCE;
-  // The ring empties as time passes, like sand running out.
-  protected readonly dashOffset = computed(() => CIRCUMFERENCE * this.store.progress());
   protected readonly clock = computed(() => formatClock(this.store.remainingMs()));
+  // The bar empties as time passes, like sand running out.
+  protected readonly percentLeft = computed(() => Math.round(100 * (1 - this.store.progress())));
+  /** Whole minutes, so screen readers aren't flooded with a new value every second. */
+  protected readonly timeLeftText = computed(() => {
+    const total = Math.round(this.store.totalMs() / 60_000);
+    const left = Math.ceil(this.store.remainingMs() / 60_000);
+    return `${left} of ${total} ${total === 1 ? 'minute' : 'minutes'} left`;
+  });
 
   protected readonly status = computed(() => {
     const { phase, status } = this.store.state();
@@ -44,6 +45,11 @@ export class TimerView {
       { length: this.store.settings().sessionsBeforeLongBreak },
       (_, i) => i < done,
     );
+  });
+
+  protected readonly cycleText = computed(() => {
+    const total = this.cycleDots().length;
+    return `${this.store.state().completedInCycle} of ${total} focus ${total === 1 ? 'session' : 'sessions'} done before a long break`;
   });
 
   protected toggle(): void {

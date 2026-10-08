@@ -7,8 +7,8 @@ notification alerts and a site blocker are available but off until you turn
 them on.
 
 <p>
-  <img src="docs/popup.png" alt="Timer" width="300" />
-  <img src="docs/settings.png" alt="Settings" width="300" />
+  <img src="docs/popup.png" alt="Timer" width="360" />
+  <img src="docs/settings.png" alt="Settings" width="360" />
 </p>
 
 ## Features
@@ -18,11 +18,12 @@ them on.
 - A countdown badge on the toolbar icon. It turns into a ✓ when a timer ends.
 - Optional alerts when time's up: a sound (bell, chime, or digital beep, with volume) and/or a desktop notification.
 - Optional auto-start for breaks and for focus sessions.
-- A count of focus sessions done today, and dots showing progress toward the long break.
+- A progress bar under the clock that empties as time runs out, a count of focus sessions done today, and dots showing progress toward the long break.
 - **Alt+Shift+P** opens the popup.
 - An optional site blocker: during focus sessions, sites on your list (YouTube, Reddit, and friends) show a "stay focused" page instead, with the time left. Breaks and pauses unblock them.
-- Follows your system's light or dark theme.
-- A **Help** screen (the ? in the popup) with a quick how-to, a contact address, and links to the privacy policy, terms of use, and credits.
+- Light, dark, or system theme (Settings > Appearance; follows your system by default).
+- Large, easy-to-read text, built to meet WCAG 2.2 AA: strong contrast in both themes, full keyboard and screen reader support, and respect for reduced-motion settings.
+- A **Help** screen (the ? in the popup) with tabs for the basics, tips, the technique, and a contact address, and links to the privacy policy, terms of use, and credits.
 
 <p>
   <img src="docs/blocked.png" alt="Blocked site page" width="600" />

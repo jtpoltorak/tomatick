@@ -8,21 +8,31 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #ffffff;
   --fg: #1f2328;
-  --muted: #6e7781;
-  --accent: #d9480f;
+  --muted: #59636e;
+  --accent: #c2410c;
   --on-accent: #ffffff;
 }
+/* <html data-theme> carries the Light / Dark choice from Settings; otherwise follow the system. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
     --bg: #1c1f24;
     --fg: #e6edf3;
     --muted: #9198a1;
     --accent: #ff7a45;
     --on-accent: #1c1f24;
   }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #1c1f24;
+  --fg: #e6edf3;
+  --muted: #9198a1;
+  --accent: #ff7a45;
+  --on-accent: #1c1f24;
 }
 
 html {
@@ -96,6 +106,6 @@ p {
   color: var(--fg);
 }
 a:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }

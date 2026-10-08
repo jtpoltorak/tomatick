@@ -34,7 +34,7 @@ const worker = ctx.serviceWorkers()[0] ?? (await ctx.waitForEvent('serviceworker
 const base = `chrome-extension://${new URL(worker.url()).host}`;
 
 const page = await ctx.newPage();
-await page.setViewportSize({ width: 320, height: 600 });
+await page.setViewportSize({ width: 480, height: 600 });
 
 /** Opens the popup at `hash` and returns a 2x PNG of it as a data URL. */
 async function popup(hash = '', before = async () => {}) {
@@ -68,13 +68,14 @@ await page.evaluate(async () => {
 
 const focus = await popup('', async () => {
   await send({ command: 'start' });
-  await page.waitForTimeout(61_000); // let a minute pass so the ring shows progress
+  await page.waitForTimeout(61_000); // let a minute pass so the bar shows progress
 });
 await send({ command: 'reset' });
 const settings = await popup('#settings');
 const help = await popup('', async () => {
   await page.getByRole('button', { name: 'Help' }).click();
   await page.waitForSelector('app-help-view');
+  await page.getByRole('tab', { name: 'Technique' }).click();
 });
 const brk = await popup('', async () => {
   await send({ command: 'setPhase', phase: 'shortBreak' });
@@ -100,7 +101,7 @@ const css = `
   * { box-sizing: border-box; }
   body { margin: 0; font-family: Rubik, sans-serif; color: #1f2328; }
   .frame { position: relative; overflow: hidden; display: flex; align-items: center; }
-  .shot { width: 320px; max-height: 700px; object-fit: cover; object-position: top; border-radius: 14px; box-shadow: 0 18px 50px rgb(0 0 0 / 0.18), 0 2px 8px rgb(0 0 0 / 0.08); background: #fff; }
+  .shot { width: 480px; max-height: 700px; object-fit: cover; object-position: top; border-radius: 14px; box-shadow: 0 18px 50px rgb(0 0 0 / 0.18), 0 2px 8px rgb(0 0 0 / 0.08); background: #fff; }
   h1 { margin: 0 0 16px; font-size: 52px; line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; }
   .badge { display: grid; place-items: center; flex: none; border-radius: 28%; background: #fff; box-shadow: 0 8px 24px rgb(0 0 0 / 0.2); }
   p { margin: 0; font-size: 26px; line-height: 1.4; color: #57606a; }
@@ -112,8 +113,8 @@ async function render(path, width, height, html) {
   await canvas.screenshot({ path, scale: 'css' });
 }
 const shot = (title, text, img, tint) =>
-  `<div class="frame" style="width:1280px;height:800px;background:linear-gradient(135deg,${tint} 0%,#ffffff 70%);padding:0 110px;gap:96px">
-    <img class="shot" src="${img}" style="width:400px">
+  `<div class="frame" style="width:1280px;height:800px;background:linear-gradient(135deg,${tint} 0%,#ffffff 70%);padding:0 90px;gap:80px">
+    <img class="shot" src="${img}" style="width:440px">
     <div style="max-width:560px"><h1>${title}</h1><p>${text}</p></div>
   </div>`;
 

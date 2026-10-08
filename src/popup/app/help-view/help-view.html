@@ -1,106 +1,135 @@
-<section>
-  <h2>How to use it</h2>
-  <ol class="steps">
-    <li>Press <strong>Start</strong> and work on one thing until the timer ends.</li>
-    <li>Take the short break. Step away from the screen if you can.</li>
-    <li>After 4 focus sessions (you can change this), take a long break.</li>
-  </ol>
-</section>
+<div class="tabs" role="tablist" aria-label="Help topics" (keydown)="onTabKey($event)">
+  @for (t of tabs; track t.id) {
+    <button
+      type="button"
+      role="tab"
+      class="tab"
+      [id]="'help-tab-' + t.id"
+      [attr.aria-selected]="tab() === t.id"
+      [attr.aria-controls]="'help-panel-' + t.id"
+      [tabIndex]="tab() === t.id ? 0 : -1"
+      (click)="tab.set(t.id)"
+    >
+      {{ t.label }}
+    </button>
+  }
+</div>
 
-<section>
-  <h2>Tips</h2>
-  <ul class="tips">
-    @if (isWeb) {
-      <li>
-        The timer keeps running in the background while this page is open. The tab's title shows the
-        time left.
-      </li>
-      <li>Press <kbd>Space</kbd> to start or pause.</li>
-      <li>
-        To keep Tomomomento in its own window, install it. In Chrome or Edge, click
-        <strong>Install</strong> at the top. In Safari on a Mac, choose
-        <strong>File &gt; Add to Dock</strong>. On a phone, use <strong>Add to Home Screen</strong>.
-      </li>
-    } @else {
-      <li>
-        The timer keeps running when the popup is closed. The toolbar badge shows the minutes left.
-      </li>
-      <li>
-        Press <kbd>Space</kbd> to start or pause, and <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
-        to open Tomomomento.
-      </li>
+<div
+  class="panel"
+  role="tabpanel"
+  tabindex="0"
+  [id]="'help-panel-' + tab()"
+  [attr.aria-labelledby]="'help-tab-' + tab()"
+>
+  @switch (tab()) {
+    @case ('basics') {
+      <h2>How to use it</h2>
+      <ol class="steps">
+        <li>Press <strong>Start</strong> and work on one thing until the timer ends.</li>
+        <li>Take the short break. Step away from the screen if you can.</li>
+        <li>After 4 focus sessions (you can change this), take a long break.</li>
+      </ol>
+      <p class="more">
+        The bar under the clock empties as time runs out, and the dots at the bottom count focus
+        sessions until your long break.
+      </p>
     }
-    <li>
-      Click <strong>Focus</strong>, <strong>Short break</strong>, or <strong>Long break</strong> to
-      jump to that timer.
-    </li>
-    <li>
-      @if (isWeb) {
-        Sounds and notifications are off until you turn them on in Settings.
-      } @else {
-        Sounds, notifications, and the site blocker are off until you turn them on in Settings.
-      }
-    </li>
-  </ul>
-</section>
-
-<section>
-  <h2>About the Pomodoro Technique®</h2>
-  <details>
-    <summary>What it is</summary>
-    <p>
-      A simple way to manage time: work on one task for 25 minutes, then take a 5-minute break. Each
-      25-minute stretch is one "pomodoro". After four, take a longer break of 15 to 30 minutes.
-    </p>
-  </details>
-  <details>
-    <summary>Who invented it</summary>
-    <p>
-      Francesco Cirillo, as a university student in Italy in the late 1980s. Struggling to
-      concentrate, he challenged himself to study for just 10 minutes, timed with a tomato-shaped
-      kitchen timer. <em>Pomodoro</em> is Italian for tomato.
-    </p>
-  </details>
-  <details>
-    <summary>Why it works</summary>
-    <ul>
-      <li>
-        <strong>Small starts beat procrastination.</strong> Committing to 25 minutes is much easier
-        than facing a whole project.
-      </li>
-      <li>
-        <strong>One thing at a time.</strong> A pomodoro is for a single task. If something else
-        comes up, jot it down and come back to it later.
-      </li>
-      <li>
-        <strong>Breaks keep you fresh.</strong> Regular short rests stop fatigue from building up,
-        so your focus lasts all day.
-      </li>
-      <li>
-        <strong>Time becomes a helper, not a threat.</strong> The goal isn't to race the clock, it's
-        to make steady progress and see how much a few focused pomodoros add up to.
-      </li>
-    </ul>
-  </details>
-  <p class="trademark">
-    Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo.
-    Tomomomento isn't affiliated with or endorsed by Francesco Cirillo.
-  </p>
-</section>
-
-<section>
-  <h2>Contact</h2>
-  <p>
-    Questions, bugs, or ideas? Email <a [href]="mailto">{{ about.email }}</a
-    >.
-  </p>
-</section>
-
-<footer>
-  <nav>
-    <a href="legal.html#privacy" target="_blank">Privacy</a>
-    <a href="legal.html#terms" target="_blank">Terms</a>
-    <a href="legal.html#credits" target="_blank">Credits</a>
-  </nav>
-  <p class="fine">Tomomomento {{ version }} · © {{ about.copyrightYear }} {{ about.author }}</p>
-</footer>
+    @case ('tips') {
+      <h2>Tips</h2>
+      <ul class="tips">
+        @if (isWeb) {
+          <li>
+            The timer keeps running in the background while this page is open. The tab's title shows
+            the time left.
+          </li>
+          <li>Press <kbd>Space</kbd> to start or pause.</li>
+          <li>
+            To keep Tomomomento in its own window, install it. In Chrome or Edge, click
+            <strong>Install</strong> at the top. In Safari on a Mac, choose
+            <strong>File &gt; Add to Dock</strong>. On a phone, use
+            <strong>Add to Home Screen</strong>.
+          </li>
+        } @else {
+          <li>
+            The timer keeps running when the popup is closed. The toolbar badge shows the minutes
+            left.
+          </li>
+          <li>
+            Press <kbd>Space</kbd> to start or pause, and <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd
+              >P</kbd
+            >
+            to open Tomomomento.
+          </li>
+        }
+        <li>
+          Click <strong>Focus</strong>, <strong>Short break</strong>, or
+          <strong>Long break</strong> to jump to that timer.
+        </li>
+        <li>
+          @if (isWeb) {
+            Sounds and notifications are off until you turn them on in Settings.
+          } @else {
+            Sounds, notifications, and the site blocker are off until you turn them on in Settings.
+          }
+        </li>
+        <li>Pick a light or dark look under <strong>Appearance</strong> in Settings.</li>
+      </ul>
+    }
+    @case ('technique') {
+      <h2>The Pomodoro Technique®</h2>
+      <h3>What it is</h3>
+      <p>
+        A simple way to manage time: work on one task for 25 minutes, then take a 5-minute break.
+        Each 25-minute stretch is one "pomodoro". After four, take a longer break of 15 to 30
+        minutes.
+      </p>
+      <h3>Who invented it</h3>
+      <p>
+        Francesco Cirillo, as a university student in Italy in the late 1980s. Struggling to
+        concentrate, he challenged himself to study for just 10 minutes, timed with a tomato-shaped
+        kitchen timer. <em>Pomodoro</em> is Italian for tomato.
+      </p>
+      <h3>Why it works</h3>
+      <ul class="reasons">
+        <li>
+          <strong>Small starts beat procrastination.</strong> Committing to 25 minutes is much
+          easier than facing a whole project.
+        </li>
+        <li>
+          <strong>One thing at a time.</strong> A pomodoro is for a single task. If something else
+          comes up, jot it down and come back to it later.
+        </li>
+        <li>
+          <strong>Breaks keep you fresh.</strong> Regular short rests stop fatigue from building up,
+          so your focus lasts all day.
+        </li>
+        <li>
+          <strong>Time becomes a helper, not a threat.</strong> The goal isn't to race the clock,
+          it's to make steady progress and see how much a few focused pomodoros add up to.
+        </li>
+      </ul>
+      <p class="trademark">
+        Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo.
+        Tomomomento isn't affiliated with or endorsed by Francesco Cirillo.
+      </p>
+    }
+    @case ('about') {
+      <h2>Contact</h2>
+      <p>
+        Questions, bugs, or ideas? Email <a [href]="mailto">{{ about.email }}</a
+        >.
+      </p>
+      <footer>
+        <nav aria-label="Legal">
+          <a href="legal.html#privacy" target="_blank">Privacy</a>
+          <a href="legal.html#terms" target="_blank">Terms</a>
+          <a href="legal.html#credits" target="_blank">Credits</a>
+        </nav>
+        <p class="fine">
+          Tomomomento {{ version }} · © {{ about.copyrightYear }} {{ about.author }}
+        </p>
+      </footer>
+    }
+  }
+</div>
