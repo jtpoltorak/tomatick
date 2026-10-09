@@ -6,6 +6,10 @@ long break after every 4 sessions. All of that is adjustable. Sound and
 notification alerts and a site blocker are available but off until you turn
 them on.
 
+Get it on the [Chrome Web Store](https://chromewebstore.google.com/detail/tomomomento-focus-timer/jifoicfckeiocjdipblgjndlmfojkdam),
+or use it in any browser at [tomomomento.com](https://tomomomento.com). What's
+new in each release is in [CHANGELOG.md](CHANGELOG.md).
+
 <p>
   <img src="docs/popup.png" alt="Timer" width="360" />
   <img src="docs/settings.png" alt="Settings" width="360" />
@@ -170,7 +174,7 @@ collection, which keeps review straightforward.
 
 1. Keep "Pomodoro" out of the extension's name and store title: Pomodoro® is a registered trademark of Francesco Cirillo, whose [trademark guidelines](https://www.pomodorotechnique.com/pomodoro-trademark-guidelines/) don't allow it in product names. Describing the technique is fine with the ® and the not-affiliated note (see Help and `legal.html#credits`).
 1. If your name or support email changes, update `src/shared/about.ts`, `PRIVACY.md`, and `TERMS.md` together.
-1. Bump `version` in `package.json` (the build copies it into the manifest).
+1. Bump `version` in `package.json` (the build copies it into the manifest) and add the release to [CHANGELOG.md](CHANGELOG.md) and the "What's new" lines in the store description.
 1. Run `npm run package` and upload the zip it writes.
 1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time $5 fee). Add support@tomomomento.com as the account's contact email (it's shown on the listing and can be changed later; the sign-in account can't). Turn on 2-step verification for the Google account, and declare yourself a **non-trader** (you're an individual, not a business).
 1. Fill in the Store listing, Privacy practices, and Distribution tabs from [store/LISTING.md](store/LISTING.md), which has the description, category, permission justifications, privacy answers, and the screenshots and promo tiles in [store/images](store/images). Regenerate the images with `node scripts/store-images.mjs` after UI changes.

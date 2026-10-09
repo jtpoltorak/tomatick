@@ -71,17 +71,29 @@ const focus = await popup('', async () => {
   await page.waitForTimeout(61_000); // let a minute pass so the bar shows progress
 });
 await send({ command: 'reset' });
+/** Merges `patch` into the stored settings. */
+const setSettings = (patch) =>
+  page.evaluate(async (p) => {
+    const { settings } = await chrome.storage.sync.get('settings');
+    await chrome.storage.sync.set({ settings: { ...settings, ...p } });
+  }, patch);
+// Settings in the dark theme, to show it off.
+await setSettings({ theme: 'dark' });
 const settings = await popup('#settings');
+await setSettings({ theme: 'system' });
 const help = await popup('', async () => {
   await page.getByRole('button', { name: 'Help' }).click();
   await page.waitForSelector('app-help-view');
   await page.getByRole('tab', { name: 'Technique' }).click();
 });
+// The break, with the optional quote turned on.
+await setSettings({ showQuotes: true });
 const brk = await popup('', async () => {
   await send({ command: 'setPhase', phase: 'shortBreak' });
   await send({ command: 'start' });
   await page.waitForTimeout(1500);
 });
+await setSettings({ showQuotes: false });
 
 // The blocked page, during a focus session.
 await send({ command: 'setPhase', phase: 'work' });
@@ -135,7 +147,7 @@ await render(
   800,
   shot(
     'Breaks that actually happen',
-    'Short breaks between sessions and a long one after four. Get a gentle sound or notification when time’s up, if you want one.',
+    'Short breaks between sessions and a long one after four. Get a gentle sound or notification when time’s up, and an optional quote to rest on.',
     brk,
     '#dcf5e1',
   ),
@@ -146,7 +158,7 @@ await render(
   800,
   shot(
     'Make it yours',
-    'Change the timer lengths and choose how you hear that time’s up. Sounds, notifications, and the site blocker stay off until you turn them on.',
+    'Change the timer lengths, pick a light or dark theme, and choose how you hear that time’s up. Sounds, notifications, and the site blocker stay off until you turn them on.',
     settings,
     '#ffe8dc',
   ),

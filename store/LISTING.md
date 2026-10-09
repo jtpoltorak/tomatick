@@ -1,7 +1,7 @@
 # Chrome Web Store listing
 
 Everything to paste into the [Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-for Tomomomento 1.0.0. Images are in [`images/`](images); regenerate them with
+for Tomomomento 1.1.0 (what changed: [CHANGELOG.md](../CHANGELOG.md)). Images are in [`images/`](images); regenerate them with
 `node scripts/store-images.mjs` after UI changes.
 
 ## Store listing tab
@@ -28,10 +28,11 @@ Features
 • A countdown badge on the toolbar icon, so you can see the time left at a glance
 • Optional alerts when time's up: a gentle bell, chime, or beep, and/or a desktop notification
 • Optional auto-start for breaks and focus sessions
-• Today's completed sessions, and dots showing how close the long break is
+• A progress bar under the clock, today's completed sessions, and dots showing how close the long break is
 • An optional site blocker that shows a "stay focused" page for the sites you choose, only during focus sessions
 • A built-in guide to the technique and how to use it
 • Light and dark themes that follow your system, or pick one yourself
+• Optional quotes on the timer screen: focus quotes while you work, rest quotes on breaks
 • Large, easy-to-read text, with keyboard and screen reader support
 • Alt+Shift+P opens Tomomomento from anywhere in Chrome
 
@@ -39,11 +40,21 @@ Private by design
 Tomomomento has no account, no ads, no analytics, and no tracking. It makes no network requests. Your settings stay in your browser.
 
 Free and open source
-Tomomomento is free and always will be. The code is open under the MIT License at https://github.com/jtpoltorak/tomomomento. It was built with Claude Code, Anthropic's AI coding assistant.
+Tomomomento is free and always will be. The code is open under the MIT License. It was built with Claude Code, Anthropic's AI coding assistant. Not using Chrome? The same timer runs in any browser on the website below.
 
-Not using Chrome? The same timer runs in any browser at https://tomomomento.com.
+What's new in 1.1
+• Choose a light, dark, or system theme
+• Optional quotes on the timer screen
+• A progress bar under the clock
+• Bigger text and controls, and Help split into tabs
+• Accessibility: meets WCAG 2.2 AA in both themes
+• Fixed: the "done today" count now resets at midnight
 
-Questions or ideas? Email support@tomomomento.com.
+Links
+Website: https://tomomomento.com
+Source code: https://github.com/jtpoltorak/tomomomento
+Full changelog: https://github.com/jtpoltorak/tomomomento/blob/main/CHANGELOG.md
+Questions or ideas: support@tomomomento.com
 
 Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco Cirillo. Tomomomento isn't affiliated with or endorsed by Francesco Cirillo.
 ```
@@ -66,7 +77,13 @@ Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco C
 
 **Homepage URL:** https://tomomomento.com
 
-**Support URL:** https://github.com/jtpoltorak/tomomomento/issues
+**Support URL:** https://tomomomento.com/legal.html#contact (no GitHub account needed to reach you)
+
+The description is plain text: the store doesn't turn URLs or emails in it into
+links. The clickable links on the listing come from the **Homepage URL** and
+**Support URL** fields above and the developer contact email (Account page,
+shown under Details). That's why the description keeps its links together in
+one "Links" block, where they're easy to spot and copy.
 
 **Mature content:** No
 
@@ -102,3 +119,16 @@ Pomodoro® and the Pomodoro Technique® are registered trademarks of Francesco C
 - **Payments:** Free of charge
 - **Visibility:** Public (or Unlisted first, if you'd like to try the store install before anyone can find it)
 - **Distribution:** All regions
+
+## Publishing an update
+
+1. Bump `version` in `package.json` (the build copies it into the manifest).
+   The store rejects a zip whose version isn't higher than the published one.
+2. Add the release to [CHANGELOG.md](../CHANGELOG.md) and the "What's new"
+   lines in the description above.
+3. `npm run package` writes `tomomomento-<version>.zip`. If the UI changed,
+   rerun `node scripts/store-images.mjs` too.
+4. In the dashboard, open the item, go to **Package** > **Upload new package**,
+   and upload the zip. Update the **Store listing** tab (description,
+   screenshots) if they changed, then **Submit for review**. The live version
+   stays up until the update is approved.
