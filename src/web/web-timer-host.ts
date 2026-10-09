@@ -204,7 +204,7 @@ export class WebTimerHost implements TimerHost {
         return;
       }
       const settings = loadSettings();
-      const next = advance(state, settings, Date.now(), true);
+      const next = advance(state, settings, Date.now(), true, state.endTime);
       this.justFinished = next.status === 'idle';
       this.commit(next);
       if (alert) void this.alertPhaseComplete(state.phase, next, settings);

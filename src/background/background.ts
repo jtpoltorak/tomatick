@@ -202,7 +202,7 @@ function completeIfDue(): Promise<TimerState> {
       await updateBadge(state);
       return state;
     }
-    const next = advance(state, settings, now, true);
+    const next = advance(state, settings, now, true, state.endTime);
     await commit(next);
     await updateBadge(next, true);
     await alertPhaseComplete(state.phase, next, settings);
