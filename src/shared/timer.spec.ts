@@ -6,6 +6,7 @@ import {
   pause,
   remainingMs,
   reset,
+  rollDay,
   sanitizeSettings,
   setPhase,
   start,
@@ -72,6 +73,38 @@ describe('timer state machine', () => {
     st = advance(st, s, T0, true); // back to focus
     st = advance(st, s, T0 + 24 * 60 * MIN, true);
     expect(st.completedToday).toBe(1);
+  });
+
+  it('a new day also starts a fresh cycle toward the long break', () => {
+    let st = advance(initialState(s, T0), s, T0, true);
+    st = advance(st, s, T0, true); // back to focus
+    st = rollDay(st, T0 + 24 * 60 * MIN);
+    expect(st.completedToday).toBe(0);
+    expect(st.completedInCycle).toBe(0);
+  });
+
+  it('a focus session that ended yesterday counts toward yesterday, not today', () => {
+    const tomorrow = T0 + 24 * 60 * MIN;
+    const running = start(initialState(s, T0), T0);
+    const st = advance(running, s, tomorrow, true, running.endTime!);
+    expect(st.phase).toBe('shortBreak');
+    expect(st.completedToday).toBe(0);
+    expect(st.completedInCycle).toBe(0);
+  });
+
+  it('a focus session that ended earlier today still counts when caught up', () => {
+    const running = start(initialState(s, T0), T0);
+    const st = advance(running, s, T0 + 60 * MIN, true, running.endTime!);
+    expect(st.completedToday).toBe(1);
+    expect(st.completedInCycle).toBe(1);
+  });
+
+  it('only a finished focus session counts, never a break', () => {
+    let st = advance(initialState(s, T0), s, T0, false); // skip focus
+    st = advance(start(st, T0), s, T0 + 5 * MIN, true); // short break runs out
+    expect(st.phase).toBe('work');
+    expect(st.completedToday).toBe(0);
+    expect(st.completedInCycle).toBe(0);
   });
 
   it('reset restores the full phase length', () => {

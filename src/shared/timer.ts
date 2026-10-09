@@ -115,10 +115,15 @@ export function remainingMs(state: TimerState, now: number): number {
   return state.remainingMs;
 }
 
-/** Resets the daily tally when the date has rolled over. */
+/**
+ * Starts a fresh day when the local date has rolled over: the daily tally and
+ * the dots toward the next long break both go back to zero.
+ */
 export function rollDay(state: TimerState, now: number): TimerState {
   const key = localDateKey(now);
-  return key === state.todayKey ? state : { ...state, completedToday: 0, todayKey: key };
+  return key === state.todayKey
+    ? state
+    : { ...state, completedToday: 0, completedInCycle: 0, todayKey: key };
 }
 
 export function start(state: TimerState, now: number): TimerState {
@@ -154,15 +159,18 @@ export function setPhase(state: TimerState, phase: Phase, settings: Settings): T
 
 /**
  * Moves to the next phase. `countWork` is true when a focus session actually
- * ran to completion, and false when the user skipped it.
+ * ran to completion, and false when the user skipped it. `finishedAt` is when
+ * the phase ended, which is earlier than `now` when the app catches up on a
+ * phase that ended while it was closed; a focus session counts toward that day.
  */
 export function advance(
   state: TimerState,
   settings: Settings,
   now: number,
   countWork: boolean,
+  finishedAt: number = now,
 ): TimerState {
-  let s = rollDay(state, now);
+  let s = rollDay(state, finishedAt);
   let next: Phase;
 
   if (s.phase === 'work') {
@@ -170,7 +178,9 @@ export function advance(
     const completedToday = countWork ? s.completedToday + 1 : s.completedToday;
     s = { ...s, completedInCycle, completedToday };
     next = completedInCycle >= settings.sessionsBeforeLongBreak ? 'longBreak' : 'shortBreak';
+    s = rollDay(s, now);
   } else {
+    s = rollDay(s, now);
     if (s.phase === 'longBreak') s = { ...s, completedInCycle: 0 };
     next = 'work';
   }

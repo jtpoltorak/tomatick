@@ -5,6 +5,7 @@ import {
   initialState,
   phaseDurationMs,
   remainingMs,
+  rollDay,
   type Settings,
   type TimerState,
 } from '../../shared/timer';
@@ -46,6 +47,17 @@ export class PomodoroStore {
     const unsubscribe = this.host.onChange(() => void this.refresh());
     inject(DestroyRef).onDestroy(unsubscribe);
 
+    // Yesterday's tally shouldn't greet you today, or linger past midnight.
+    let midnight: ReturnType<typeof setTimeout> | undefined;
+    const rollAtMidnight = (): void => {
+      midnight = setTimeout(() => {
+        this.state.update((state) => rollDay(state, Date.now()));
+        rollAtMidnight();
+      }, msUntilTomorrow(Date.now()));
+    };
+    rollAtMidnight();
+    inject(DestroyRef).onDestroy(() => clearTimeout(midnight));
+
     effect((onCleanup) => {
       if (this.state().status !== 'running') return;
       this.now.set(Date.now());
@@ -57,7 +69,7 @@ export class PomodoroStore {
   async refresh(): Promise<void> {
     const { state, settings, alertHintDismissed, blockerAccess } = await this.host.load();
     this.blockerAccess.set(blockerAccess);
-    this.state.set(state);
+    this.state.set(rollDay(state, Date.now()));
     this.settings.set(settings);
     this.alertHintDismissed.set(alertHintDismissed);
     this.now.set(Date.now());
@@ -68,7 +80,7 @@ export class PomodoroStore {
     const res = await this.host.send(command);
     if (res.ok) {
       this.now.set(Date.now());
-      this.state.set(res.state);
+      this.state.set(rollDay(res.state, Date.now()));
     } else {
       console.error(res.error);
     }
@@ -95,4 +107,11 @@ export class PomodoroStore {
     this.alertHintDismissed.set(true);
     await this.host.dismissAlertHint();
   }
+}
+
+/** Time until just after the next local midnight. */
+function msUntilTomorrow(now: number): number {
+  const tomorrow = new Date(now);
+  tomorrow.setHours(24, 0, 1, 0);
+  return tomorrow.getTime() - now;
 }
