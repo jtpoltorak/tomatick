@@ -22,6 +22,7 @@ them on.
 - **Alt+Shift+P** opens the popup.
 - An optional site blocker: during focus sessions, sites on your list (YouTube, Reddit, and friends) show a "stay focused" page instead, with the time left. Breaks and pauses unblock them.
 - Light, dark, or system theme (Settings > Appearance; follows your system by default).
+- Optional quotes on the timer screen (Settings > Appearance, off by default): focus and effort quotes during focus, rest quotes on breaks.
 - Large, easy-to-read text, built to meet WCAG 2.2 AA: strong contrast in both themes, full keyboard and screen reader support, and respect for reduced-motion settings.
 - A **Help** screen (the ? in the popup) with tabs for the basics, tips, the technique, and a contact address, and links to the privacy policy, terms of use, and credits.
 

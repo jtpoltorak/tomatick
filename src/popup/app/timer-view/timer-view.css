@@ -90,6 +90,37 @@
   filter: brightness(1.08);
 }
 
+/* Quiet on purpose: it sits below the controls and never competes with the clock.
+   Spacing tightens a little so a three-line quote still fits Chrome's 600px popup. */
+:host:has(.quote) {
+  gap: 1.25rem;
+}
+:host:has(.quote) .dial {
+  padding: 0;
+}
+.quote {
+  margin: 0;
+  padding: 0 0.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+.quote blockquote {
+  margin: 0;
+}
+.quote p {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+.quote figcaption {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+.quote figcaption::before {
+  content: '— ';
+}
+
 .footer {
   display: flex;
   align-items: center;

@@ -152,4 +152,9 @@ describe('timer state machine', () => {
     expect(sanitizeSettings({ theme: 'dark' }).theme).toBe('dark');
     expect(sanitizeSettings({ theme: 'purple' as never }).theme).toBe('system');
   });
+
+  it('sanitizeSettings keeps quotes off unless turned on', () => {
+    expect(sanitizeSettings({}).showQuotes).toBe(false);
+    expect(sanitizeSettings({ showQuotes: true }).showQuotes).toBe(true);
+  });
 });

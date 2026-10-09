@@ -1,4 +1,5 @@
 import { Component, computed, HostListener, inject, output } from '@angular/core';
+import { pickQuote, type Quote } from '../../../shared/quotes';
 import { formatClock, PHASE_LABELS, type Phase } from '../../../shared/timer';
 import { PomodoroStore } from '../pomodoro-store';
 
@@ -16,6 +17,19 @@ export class TimerView {
     { id: 'shortBreak', label: PHASE_LABELS.shortBreak },
     { id: 'longBreak', label: PHASE_LABELS.longBreak },
   ];
+
+  private readonly phase = computed(() => this.store.state().phase);
+  private lastQuote?: Quote;
+  /** Re-picks only when the phase changes, not on every tick or settings save. */
+  private readonly phaseQuote = computed(() => {
+    this.lastQuote = pickQuote(this.phase(), this.lastQuote);
+    return this.lastQuote;
+  });
+  // Anyone who turned quotes on has been through Settings and seen the alert
+  // options, so the quote takes the alert hint's place and the popup stays short.
+  protected readonly quote = computed(() =>
+    this.store.settings().showQuotes ? this.phaseQuote() : null,
+  );
 
   protected readonly clock = computed(() => formatClock(this.store.remainingMs()));
   // The bar empties as time passes, like sand running out.
