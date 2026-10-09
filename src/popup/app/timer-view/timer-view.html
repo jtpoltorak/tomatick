@@ -53,6 +53,15 @@
   </button>
 </div>
 
+@if (quote(); as q) {
+  <figure class="quote">
+    <blockquote>
+      <p>{{ q.text }}</p>
+    </blockquote>
+    <figcaption [title]="q.source">{{ q.author }}</figcaption>
+  </figure>
+}
+
 <footer class="footer">
   <div class="cycle" role="img" [attr.aria-label]="cycleText()" [title]="cycleText()">
     @for (done of cycleDots(); track $index) {
@@ -62,7 +71,7 @@
   <div class="today">{{ store.state().completedToday }} done today</div>
 </footer>
 
-@if (store.alertsOff() && !store.alertHintDismissed()) {
+@if (store.alertsOff() && !store.alertHintDismissed() && !quote()) {
   <aside class="hint">
     <span>Get an alert when time's up?</span>
     <button class="link" (click)="openSettings.emit()">Turn on</button>

@@ -27,6 +27,8 @@ export interface Settings {
   blockedSites: string[];
   /** 'system' follows the device's light or dark mode. */
   theme: ThemeId;
+  /** Show a short quote under the timer, one per phase. */
+  showQuotes: boolean;
 }
 
 export interface TimerState {
@@ -60,6 +62,7 @@ export const DEFAULT_SETTINGS: Settings = {
   blockSites: false,
   blockedSites: [],
   theme: 'system',
+  showQuotes: false,
 };
 
 export const THEME_LABELS: Record<ThemeId, string> = {
@@ -231,5 +234,6 @@ export function sanitizeSettings(input: Partial<Settings>): Settings {
     blockedSites:
       input.blockedSites === undefined ? d.blockedSites : sanitizeSites(input.blockedSites),
     theme: input.theme && input.theme in THEME_LABELS ? input.theme : d.theme,
+    showQuotes: input.showQuotes ?? d.showQuotes,
   };
 }

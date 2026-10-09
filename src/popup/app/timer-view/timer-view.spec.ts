@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { BREAK_QUOTES, FOCUS_QUOTES } from '../../../shared/quotes';
 import { createFakeStore, provideFakeStore } from '../testing';
 import { TimerView } from './timer-view';
 
@@ -60,5 +61,33 @@ describe('TimerView', () => {
     await fixture.whenStable();
     expect(store.alertHintDismissed()).toBe(true);
     expect(el.querySelector('.hint')).toBeNull();
+  });
+
+  it('shows no quote until quotes are turned on', async () => {
+    const { el, fixture, store } = await setup();
+    expect(el.querySelector('.quote')).toBeNull();
+
+    store.settings.update((s) => ({ ...s, showQuotes: true }));
+    await fixture.whenStable();
+    const text = el.querySelector('.quote blockquote')?.textContent?.trim();
+    expect(FOCUS_QUOTES.some((q) => q.text === text)).toBe(true);
+    expect(el.querySelector('.quote figcaption')?.textContent?.trim()).toBeTruthy();
+    expect(el.querySelector('.hint')).toBeNull();
+  });
+
+  it('keeps the quote through the session and picks a rest quote for the break', async () => {
+    const { el, fixture, store } = await setup();
+    store.settings.update((s) => ({ ...s, showQuotes: true }));
+    await fixture.whenStable();
+    const quoteText = () => el.querySelector('.quote blockquote')?.textContent?.trim();
+    const first = quoteText();
+
+    store.state.update((s) => ({ ...s, status: 'running', endTime: Date.now() + s.remainingMs }));
+    await fixture.whenStable();
+    expect(quoteText()).toBe(first);
+
+    store.state.update((s) => ({ ...s, phase: 'shortBreak', status: 'idle' }));
+    await fixture.whenStable();
+    expect(BREAK_QUOTES.some((q) => q.text === quoteText())).toBe(true);
   });
 });

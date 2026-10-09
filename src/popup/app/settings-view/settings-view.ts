@@ -59,6 +59,7 @@ export class SettingsView {
     sound: ['bell' as SoundId],
     volumePercent: [70],
     theme: ['system' as ThemeId],
+    showQuotes: [false],
   });
 
   constructor() {
